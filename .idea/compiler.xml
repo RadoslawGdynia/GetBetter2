@@ -8,6 +8,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="com.RadoslawGdynia.GetBetter.Diary" />
         <module name="com.RadoslawGdynia.GetBetter.Calendar" />
+        <module name="com.RadoslawGdynia.GetBetter.MainWindow" />
         <module name="com.RadoslawGdynia.GetBetter.Finance" />
       </profile>
     </annotationProcessing>

@@ -27,7 +27,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        URL url = new File("src/main/resources/GetBetterMain.fxml").toURI().toURL();
+        URL url = new File("com.RadoslawGdynia.GetBetter.MainWindow/src/main/resources/GetBetterMain.fxml").toURI().toURL();
         Parent root = FXMLLoader.load(url);
         primaryStage.setTitle("GetBetter!");
         primaryStage.setScene(new Scene(root, 400, 600));

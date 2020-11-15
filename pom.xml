@@ -11,6 +11,7 @@
         <module>com.RadoslawGdynia.GetBetter.Calendar</module>
         <module>com.RadoslawGdynia.GetBetter.Diary</module>
         <module>com.RadoslawGdynia.GetBetter.Finance</module>
+        <module>com.RadoslawGdynia.GetBetter.MainWindow</module>
     </modules>
     <properties>
         <maven.compiler.target>11</maven.compiler.target>
@@ -41,15 +42,23 @@
             <version>5.7.0</version>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>com.RadoslawGdynia</groupId>
-            <artifactId>com.RadoslawGdynia.GetBetter.Calendar</artifactId>
-            <version>1.0-SNAPSHOT</version>
-            <scope>compile</scope>
-        </dependency>
-
-
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
+                <configuration>
+
+                </configuration>
+
+
+            </plugin>
+        </plugins>
+    </build>
 
 
 </project>

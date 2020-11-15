@@ -38,7 +38,7 @@ public class GetBetterCalendar {
             System.out.println("Day " + day.getDate() + " was added to calendar");
         }
         else {
-            System.out.println("This day is already in calendar");
+            System.out.println("This day:" + day.getDate() + " is already in calendar");
             throw new IOException("Tried to add existing day");
         }
     }
