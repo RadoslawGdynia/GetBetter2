@@ -7,7 +7,6 @@ import Tiles.CalendarTile;
 import Tiles.PlanTile;
 import Tiles.Tile;
 import Tiles.TimeTile;
-import javafx.beans.InvalidationListener;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -18,23 +17,24 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.util.Callback;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.TextStyle;
-import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Optional;
 
 public class GetBetterCalendarController {
 
+    public static final Logger log = LoggerFactory.getLogger(GetBetterCalendarController.class);
+
 
     //    //GENERAL:
     private static GetBetterCalendarController instance;
-    private ArrayList<InvalidationListener> listeners = new ArrayList<>();
-    private int currentMonthNum;
-    private int currentYearNum;
-    private int currentDayNum;
+
+    private int currentMonthNum, currentYearNum, currentDayNum;
     private Day selectedDay = GetBetterCalendar.getDays().get(GetBetterCalendar.getDayIndex(LocalDate.now()));
 
     //CALENDAR

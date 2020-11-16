@@ -4,15 +4,19 @@ import Day.Day;
 import Task.Subtask;
 import Task.Task;
 import Task.WorkTask;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.*;
 import java.time.LocalDate;
 
 public class CalendarDatasource {
 
+    public static final Logger log = LoggerFactory.getLogger(CalendarDatasource.class);
+
     public static final String DB_NAME = "GetBetterCalendarDB.db";
 
-    public static final String CONNECTION_STRING = "jdbc:sqlite:N:\\Programowanie\\GitHub repozytoria\\Repozytoria Online\\com.RadoslawGdynia.GetBetter\\com.RadoslawGdynia.GetBetter.Calendar\\src\\main\\resources\\" + DB_NAME;
+    public static final String CONNECTION_STRING = "jdbc:sqlite:P:\\GitHub repozytoria\\Repozytoria Online\\com.RadoslawGdynia.GetBetter\\com.RadoslawGdynia.GetBetter.Calendar\\src\\main\\resources\\" + DB_NAME;
     private Connection conn;
     private static CalendarDatasource instance = new CalendarDatasource();
 

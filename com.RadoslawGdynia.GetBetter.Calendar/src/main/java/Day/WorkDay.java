@@ -1,8 +1,13 @@
 package Day;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.time.LocalDate;
 
 public class WorkDay extends Day {
+
+    public static final Logger log = LoggerFactory.getLogger(WorkDay.class);
 
 
     public WorkDay(LocalDate date) {

@@ -5,11 +5,15 @@ import Day.Day;
 import Task.Subtask;
 import Task.TrivialTask;
 import Task.WorkTask;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.time.LocalDate;
 
 public class TaskFactory {
+
+    public static final Logger log = LoggerFactory.getLogger(TaskFactory.class);
 
     public static void createTask(int dayID, String className, String name, String details, boolean finalised, int pointValue, LocalDate deadline, int deadlineCounter) throws NullPointerException {
         Day day = GetBetterCalendar.getDays().get(dayID - 1);

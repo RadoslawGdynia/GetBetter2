@@ -1,6 +1,8 @@
 package Day;
 
 import javafx.beans.property.SimpleStringProperty;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Class designed with Decorator Software design pattern kept in mind.
@@ -10,6 +12,7 @@ import javafx.beans.property.SimpleStringProperty;
  * */
 
 public class CelebrationDay extends Day {
+    public static final Logger log = LoggerFactory.getLogger(CelebrationDay.class);
     private SimpleStringProperty nameOfCelebration = new SimpleStringProperty("");
     private SimpleStringProperty detailsForCelebration = new SimpleStringProperty("");
     private String color;

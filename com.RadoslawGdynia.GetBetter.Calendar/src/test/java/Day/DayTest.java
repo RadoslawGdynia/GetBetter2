@@ -4,6 +4,8 @@ import Task.Task;
 import Task.TrivialTask;
 import javafx.collections.ObservableList;
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.time.LocalDate;
 
@@ -11,6 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
 class DayTest {
+    public static final Logger log = LoggerFactory.getLogger(DayTest.class);
     Day test;
 
     @org.junit.jupiter.api.BeforeEach
