@@ -60,7 +60,7 @@ public class CalendarDatasource {
             return true;
 
         } catch (SQLException e) {
-            System.out.println("Could not get connection with database. Message: " + e.getMessage());
+            log.error("Could not get connection with database. Message: " + e.getMessage());
             return false;
         }
     }
@@ -69,7 +69,8 @@ public class CalendarDatasource {
         try {
             conn.close();
         } catch (SQLException e) {
-            System.out.println("Couldnt close connection. WHAT IS HAPPENING?!");
+            log.error("Couldn't close connection. WHAT IS HAPPENING?!");
+
         }
     }
 
@@ -80,7 +81,7 @@ public class CalendarDatasource {
             statement.execute(DAY_INSERT_START + day.getDayID() + ", \"" + day.getDate().toString() + "\", " + day.getTodayTasks().size() + ")");
 
         } catch (SQLException e) {
-            System.out.println("Something bad happened during insertion of new day in DB: " + e.getMessage());
+            log.error("Something bad happened during insertion of new day in DB: " + e.getMessage());
         }
 
     }
@@ -122,7 +123,7 @@ public class CalendarDatasource {
             statement.execute(sb.toString());
 
         } catch (SQLException e) {
-            System.out.println("Error took place while saving task " + task.getTaskName() + " to the DB \n Message: " + e.getMessage());
+            log.error("Error took place while saving task " + task.getTaskName() + " to the DB \n Message: " + e.getMessage());
         }
     }
 
@@ -146,7 +147,7 @@ public class CalendarDatasource {
             statement.execute(sb.toString());
 
         } catch (SQLException e) {
-            System.out.println("Error during saving subtask " + task.getTaskName() + " of WorkTask " + parentName);
+            log.error("Error during saving subtask " + task.getTaskName() + " of WorkTask " + parentName);
         }
 
     }
@@ -160,7 +161,7 @@ public class CalendarDatasource {
             statement.execute(NAME_UPDATE);
 
         } catch (SQLException e) {
-            System.out.println("Error took place while editing name and details of task: " + task.getTaskName() + "\n Message: " + e.getMessage());
+            log.error("Error took place while editing name and details of task: " + task.getTaskName() + "\n Message: " + e.getMessage());
         }
 
     }
@@ -174,11 +175,11 @@ public class CalendarDatasource {
             if (task.getClass().getSimpleName().equals("WorkTask")) {
                 statement.execute(DEADLINE_UPDATE);
             } else {
-                System.out.println("Only WorkTasks may have their deadlines changed");
+                log.info("Only WorkTasks may have their deadlines changed");
             }
 
         } catch (SQLException e) {
-            System.out.println("Error took place while editing deadline of task " + task.getTaskName() + "\n Message: " + e.getMessage());
+            log.error("Error took place while editing deadline of task " + task.getTaskName() + "\n Message: " + e.getMessage());
         }
 
     }
@@ -191,7 +192,7 @@ public class CalendarDatasource {
         try (Statement statement = conn.createStatement()) {
             statement.execute(FINALISED_UPDATE);
         } catch (SQLException e) {
-            System.out.println("Error took place while editing finalisation status of task " + task.getTaskName() + "\n Message: " + e.getMessage());
+            log.error("Error took place while editing finalisation status of task " + task.getTaskName() + "\n Message: " + e.getMessage());
         }
 
     }
@@ -206,7 +207,7 @@ public class CalendarDatasource {
         try (Statement statement = conn.createStatement()) {
             statement.execute(TASK_MOVE_DAY);
         } catch (SQLException e) {
-            System.out.println("Error took place while editing finalisation status of task " + task.getTaskName() + "\n Message: " + e.getMessage());
+            log.error("Error took place while editing finalisation status of task " + task.getTaskName() + "\n Message: " + e.getMessage());
         }
 
     }
@@ -218,7 +219,7 @@ public class CalendarDatasource {
             statement.execute(TASK_DELETE);
 
         } catch (SQLException e) {
-            System.out.println("Error took place while canceling task " + task.getTaskName() + " from DB");
+            log.error("Error took place while canceling task " + task.getTaskName() + " from DB");
         }
     }
 
@@ -238,7 +239,7 @@ public class CalendarDatasource {
             resultSet.close();
 
         } catch (SQLException e) {
-            System.out.println("Error took place while querying all days");
+            log.error("Error took place while querying all days");
         }
     }
 
@@ -261,7 +262,7 @@ public class CalendarDatasource {
             }
 
         } catch (SQLException e) {
-            System.out.println("Error took place while loading tasks for day: " + day.getDate());
+            log.error("Error took place while loading tasks for day: " + day.getDate());
         }
 
     }
@@ -282,7 +283,7 @@ public class CalendarDatasource {
 
             }
         }catch (SQLException e) {
-            System.out.println("Error took place while querying subtasks for task: " + task.getTaskName() );
+            log.error("Error took place while querying subtasks for task: " + task.getTaskName());
         }
 
     }

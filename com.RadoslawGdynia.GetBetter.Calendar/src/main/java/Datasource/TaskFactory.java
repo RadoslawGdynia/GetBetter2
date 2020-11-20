@@ -26,10 +26,10 @@ public class TaskFactory {
                 CalendarDatasource.getInstance().querySubtasks(task);
 
             } else {
-                throw new IOException("Unknowk Task class:" + className + ", impossible to add");
+                throw new IOException("Unknown Task class:" + className + ", impossible to add");
             }
         }catch( IOException e) {
-            System.out.println("Error during task creation. \nMessage: " + e.getMessage());
+            log.debug("Error during task creation. \nMessage: " + e.getMessage());
 
         }
     }

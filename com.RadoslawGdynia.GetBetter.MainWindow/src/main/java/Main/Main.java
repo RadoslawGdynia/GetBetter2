@@ -23,7 +23,7 @@ public class Main extends Application {
     @Override
     public void init() throws Exception {
         if(!CalendarDatasource.getInstance().open()) {
-            System.out.println("FATAL ERROR during load of database"); //zmienić na okno dialogowe
+            log.error("FATAL ERROR during load of database"); //zmienić na okno dialogowe
             Platform.exit();
         }
         GetBetterCalendar.loadCalendar();

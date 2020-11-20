@@ -5,10 +5,10 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane fx:id="mainPane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1700.0" style="-fx-background-color: BLANCHEDALMOND;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.GetBetterCalendarController" >
+<AnchorPane fx:id="mainPane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1700.0" style="-fx-background-color: BLANCHEDALMOND;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.GetBetterCalendarController">
    <TabPane fx:id="detailsTabPane" layoutX="601.0" layoutY="-2.0" prefHeight="800.0" prefWidth="755.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="945.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
      <tabs>
-         <Tab text="Day.Day Plan">
+         <Tab closable="false" text="Day Plan">
             <content>
                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-background-color: #dbb98c;">
                   <children>
@@ -31,13 +31,13 @@
                </AnchorPane>
             </content>
          </Tab>
-       <Tab text="Todays Tasks">
+       <Tab closable="false" text="Todays Tasks">
          <content>
            <AnchorPane disable="true" minHeight="0.0" minWidth="0.0" prefHeight="605.0" prefWidth="600.0" style="-fx-background-color: BLANCHEDALMOND;">
                   <children>
-                     <Button fx:id="addTaskButton" layoutX="554.0" layoutY="49.0" mnemonicParsing="false" onAction="#handleAddTaskClick" prefHeight="26.0" prefWidth="118.0" text="New Task.Task" />
-                     <Button fx:id="EditTaskButton" disable="true" layoutX="553.0" layoutY="145.0" mnemonicParsing="false" onAction="#handleEditTaskClick" prefHeight="26.0" prefWidth="121.0" text="Edit Task.Task" />
-                     <Button fx:id="DeleteTaskButton" disable="true" layoutX="552.0" layoutY="193.0" mnemonicParsing="false" onAction="#handleDeleteTaskClick" prefHeight="25.0" prefWidth="123.0" text="Delete Task.Task" />
+                     <Button fx:id="addTaskButton" layoutX="554.0" layoutY="49.0" mnemonicParsing="false" onAction="#handleAddTaskClick" prefHeight="26.0" prefWidth="118.0" text="New Task" />
+                     <Button fx:id="EditTaskButton" disable="true" layoutX="553.0" layoutY="145.0" mnemonicParsing="false" onAction="#handleEditTaskClick" prefHeight="26.0" prefWidth="121.0" text="Edit Task" />
+                     <Button fx:id="DeleteTaskButton" disable="true" layoutX="552.0" layoutY="193.0" mnemonicParsing="false" onAction="#handleDeleteTaskClick" prefHeight="25.0" prefWidth="123.0" text="Delete Task" />
                       <Button fx:id="AddTaskButton" disable="true" layoutX="553.0" layoutY="97.0" mnemonicParsing="false" onAction="#handleAddSubtaskClick" prefHeight="26.0" prefWidth="120.0" text="Add Subtask" />
                      <TreeTableView fx:id="subtasksTreeTable" layoutX="36.0" layoutY="295.0" prefHeight="442.0" prefWidth="495.0" showRoot="false">
                        <columns>
@@ -48,7 +48,7 @@
                      </TreeTableView>
                       <TableView fx:id="TVTasksTable" layoutX="36.0" layoutY="28.0" onMouseClicked="#handleTaskSelection" prefHeight="230.0" prefWidth="496.0">
                        <columns>
-                           <TableColumn fx:id="TVTaskName" prefWidth="125.0" text="Task.Task" />
+                           <TableColumn fx:id="TVTaskName" prefWidth="125.0" text="Task" />
                            <TableColumn fx:id="TVTaskDeadline" prefWidth="85.0" text="Deadline" />
                            <TableColumn fx:id="TVNumberOfSubtasks" prefWidth="137.0" text="Number of Subtasks" />
                            <TableColumn prefWidth="148.0" text="Status" />

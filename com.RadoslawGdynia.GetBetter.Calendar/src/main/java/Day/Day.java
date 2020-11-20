@@ -1,6 +1,7 @@
 package Day;
 
 import CalendarControl.GetBetterCalendar;
+import Datasource.CalendarDatasource;
 import Task.Task;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -59,10 +60,11 @@ public class Day {
     }
     public void addTask(Task newTask) {
         if(findTask(newTask)) {
-            System.out.println("Task " + newTask.getTaskName() + " is already in this day. Operation rejected.");
+            log.info("Task " + newTask.getTaskName() + " is already in this day. Operation rejected.");
         } else
             todayTasks.add(newTask);
-            System.out.println("Task " + newTask.getTaskName() + " was added to: " + this.getDate());
+            CalendarDatasource.getInstance().addTaskToDB(newTask);
+            log.info("Task " + newTask.getTaskName() + " was added to: " + this.getDate());
 
         }
     public boolean removeTask(Task taskToDelete) {
@@ -72,10 +74,10 @@ public class Day {
         } else {
             if (findTask(taskToDelete)) {
                 todayTasks.remove(taskToDelete);
-                System.out.println("Task " + taskToDelete.getTaskName() + " was deleted");
+                log.info("Task " + taskToDelete.getTaskName() + " was deleted");
                 return true;
             } else {
-                System.out.println("Task " + taskToDelete.getTaskName() + " is not on the task list. Rejected.");
+                log.info("Task " + taskToDelete.getTaskName() + " is not on the task list. Rejected.");
                 return false;
             }
         }

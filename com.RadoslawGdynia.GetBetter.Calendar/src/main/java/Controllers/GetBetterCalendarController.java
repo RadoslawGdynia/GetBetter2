@@ -20,7 +20,9 @@ import javafx.util.Callback;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.time.LocalDate;
 import java.time.format.TextStyle;
 import java.util.Locale;
@@ -28,16 +30,13 @@ import java.util.Optional;
 
 public class GetBetterCalendarController {
 
+    // ============== GENERAL: ==============
     public static final Logger log = LoggerFactory.getLogger(GetBetterCalendarController.class);
-
-
-    //    //GENERAL:
     private static GetBetterCalendarController instance;
-
     private int currentMonthNum, currentYearNum, currentDayNum;
     private Day selectedDay = GetBetterCalendar.getDays().get(GetBetterCalendar.getDayIndex(LocalDate.now()));
 
-    //CALENDAR
+    //============== CALENDAR ==============
 
     @FXML
     private Label monthName;
@@ -47,13 +46,11 @@ public class GetBetterCalendarController {
     private Pane daysTilePane;
 
 
-    //DAY DETAILS
+    // ============== DAY DETAILS ==============
     @FXML
     private TabPane detailsTabPane;
 
-
-
-    //Day Plan
+    // ============== Day Plan ==============
     @FXML
     private Label showDay;
     @FXML
@@ -63,9 +60,7 @@ public class GetBetterCalendarController {
     @FXML
     private Pane PlanningPane;
 
-    ProgressBar completion = new ProgressBar();
-
-
+    // ============== Today Tasks ==============
 
     @FXML
     private TreeTableView<Task> subtasksTreeTable;
@@ -95,7 +90,7 @@ public class GetBetterCalendarController {
 
 
 
-    //GENERAL METHODS:
+    //============== GENERAL METHODS: ==============
     public GetBetterCalendarController(){
         instance = this;
     }
@@ -142,8 +137,7 @@ public class GetBetterCalendarController {
         currentDayNum = selectedDay.getDate().getDayOfMonth();
         configureCalendarPane();
     }
-    //CALENDAR AREA METHODS:
-    //=====================
+    // ============== CALENDAR AREA METHODS: ==============
 
     private void configureCalendarPane() {
 
@@ -185,7 +179,7 @@ public class GetBetterCalendarController {
         }
         detailsTabPane.setDisable(true);
         configureCalendarPane();
-        System.out.println("Currently chosen month is: " + LocalDate.of(currentYearNum, currentMonthNum, currentDayNum).getMonth().getDisplayName(TextStyle.FULL, Locale.ENGLISH));
+        log.info("Currently chosen month is: " + LocalDate.of(currentYearNum, currentMonthNum, currentDayNum).getMonth().getDisplayName(TextStyle.FULL, Locale.ENGLISH));
     }
 
     public void handleMonthForward() {
@@ -198,11 +192,10 @@ public class GetBetterCalendarController {
         }
         detailsTabPane.setDisable(true);
         configureCalendarPane();
-        System.out.println("Currently chosen month is: " + LocalDate.of(currentYearNum, currentMonthNum, currentDayNum).getMonth().getDisplayName(TextStyle.FULL, Locale.ENGLISH));
+        log.info("Currently chosen month is: " + LocalDate.of(currentYearNum, currentMonthNum, currentDayNum).getMonth().getDisplayName(TextStyle.FULL, Locale.ENGLISH));
     }
 
-    //DAY DETAILS METHODS:
-    //===================
+    //============== DAY DETAILS METHODS: ==============
 
     private void noTaskSelected(){
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -213,7 +206,7 @@ public class GetBetterCalendarController {
     }
 
 
-    // A. DAY PLAN METHODS:
+    //============== A. DAY PLAN METHODS: ==============
     public void configureTimeTiles() {
         final int TILES_NUMBER = 18;
         int hour1 = 6;
@@ -247,7 +240,7 @@ public class GetBetterCalendarController {
 
 
 
-    // B. TODAYS TASK METHODS:
+    //============ B. TODAYS TASK METHODS: ================
 
 
     public void configureTasksTable() {
@@ -261,7 +254,7 @@ public class GetBetterCalendarController {
 
     public void handleTaskSelection(MouseEvent mouseEvent) {
         Task cTask = TVTasksTable.getSelectionModel().getSelectedItem();
-        System.out.println("Currently selected task: " + cTask.getTaskName());
+        log.info("Currently selected task: " + cTask.getTaskName());
         //  subtasksTreeTable.setDisable(false);
 
         AddTaskButton.setDisable(false);
@@ -310,14 +303,13 @@ public class GetBetterCalendarController {
     public void handleAddTaskClick() {
         Dialog<ButtonType> dialog = new Dialog<>();
         dialog.setTitle("Addition of task to the day: " + selectedDay.getDate());
-        FXMLLoader fxmlLoader = new FXMLLoader();
-        fxmlLoader.setLocation(getClass().getResource("AddTaskDialog.fxml"));
-
+        FXMLLoader fxmlLoader = new FXMLLoader((getClass().getResource("AddTaskDialog.fxml")));
 
         try {
-            dialog.getDialogPane().setContent(fxmlLoader.load());
+            URL url = new File("com.RadoslawGdynia.GetBetter.Calendar/src/main/resources/AddTaskDialog.fxml").toURI().toURL();
+            dialog.getDialogPane().setContent(FXMLLoader.load(url));
         } catch (IOException e) {
-            System.out.println("Could not load the dialog");
+            log.error("Could not load the dialog");
             e.printStackTrace();
             return;
         }

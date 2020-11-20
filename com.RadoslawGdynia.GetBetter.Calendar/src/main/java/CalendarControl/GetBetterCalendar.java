@@ -37,10 +37,10 @@ public class GetBetterCalendar {
     public void addDay(Day day) throws IOException{
         if(!dayExists(day)){
             days.add(day);
-            System.out.println("Day " + day.getDate() + " was added to calendar");
+            log.info("Day " + day.getDate() + " was added to calendar");
         }
         else {
-            System.out.println("This day:" + day.getDate() + " is already in calendar");
+            log.info("This day:" + day.getDate() + " is already in calendar");
             throw new IOException("Tried to add existing day");
         }
     }
@@ -58,28 +58,17 @@ public class GetBetterCalendar {
                     return days.indexOf(day);
                 }
             }
-            System.out.println("Sought day was not found. Returning day of TODAY");
+            log.info("Sought day was not found. Returning day of TODAY");
             for (Day day : days) {
                 if (day.getDate().equals(LocalDate.now())) {
                     return days.indexOf(day);
                 }
             }
         } catch (NullPointerException e) {
-            System.out.println("No such date in database");
+            log.info("No such date in database");
         }
-        System.out.println("Error took place while searching the days list");
+        log.debug("Error took place while searching the days list");
         return 0;
-    }
-
-    public static void saveCalendar() {
-
-
-        try {
-
-        } catch (Exception e) {
-            System.out.println("Error took place while saving the calendar.\n Message: " + e.getMessage());
-            e.printStackTrace();
-        }
     }
 
     public static void loadCalendar() {
@@ -99,15 +88,14 @@ public class GetBetterCalendar {
             }
             if(days.get(days.size()-1).getDate().isBefore(LocalDate.now().plusYears(1))){
                 LocalDate date = days.get(days.size()-1).getDate().plusDays(1);
-                while(days.get(days.size()-1).getDate().isBefore(LocalDate.now().plusYears(1))){
+                while(date.isBefore(LocalDate.now().plusYears(1))){
                     Day day = new Day(date);
-                    GetBetterCalendar.getInstance().addDay(day);
                     CalendarDatasource.getInstance().insertDayToDB(day);
                     date = date.plusDays(1);
                 }
             }
-        } catch (Exception f) {
-            System.out.println("Brak szukanego pliku");
+        } catch (IOException e) {
+            log.debug("Problem with loading database data from Calendar level. Message: " + e.getMessage());
         }
     }
 }
