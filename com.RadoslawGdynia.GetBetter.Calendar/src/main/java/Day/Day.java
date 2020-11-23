@@ -2,7 +2,7 @@ package Day;
 
 import CalendarControl.GetBetterCalendar;
 import Datasource.CalendarDatasource;
-import Task.Task;
+import Task.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import org.slf4j.Logger;
@@ -19,6 +19,7 @@ public class Day {
     private int dayID;
     private static int GlobalID= 1;
     private int taskNumber;
+
 
     public Day(LocalDate date) {
         this.date = date;
@@ -58,12 +59,16 @@ public class Day {
     public ObservableList<Task> getTodayTasks() {
         return todayTasks;
     }
+
     public void addTask(Task newTask) {
         if(findTask(newTask)) {
             log.info("Task " + newTask.getTaskName() + " is already in this day. Operation rejected.");
         } else
             todayTasks.add(newTask);
+            if(CalendarDatasource.getInstance().checkTaskExistenceInDB(this.getDayID(), newTask.getTaskName())){
             CalendarDatasource.getInstance().addTaskToDB(newTask);
+        }
+
             log.info("Task " + newTask.getTaskName() + " was added to: " + this.getDate());
 
         }

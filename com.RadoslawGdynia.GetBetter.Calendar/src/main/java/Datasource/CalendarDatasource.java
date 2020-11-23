@@ -256,9 +256,11 @@ public class CalendarDatasource {
                 String details = results.getString(COLUMN_TASKS_DETAILS);
                 boolean finalised = Boolean.parseBoolean(results.getString(COLUMN_TASKS_FINALISED));
                 int points = results.getInt(COLUMN_TASKS_POINTVALUE);
-                LocalDate deadline = LocalDate.parse(results.getString(COLUMN_TASKS_DEADLINE));
+                String deadlineText = results.getString(COLUMN_TASKS_DEADLINE);
+                LocalDate deadline = deadlineText.equals("null") ? null : LocalDate.parse(deadlineText);
                 int deadlineCounter = results.getInt(COLUMN_TASKS_DEADLINECOUNTER);
                 TaskFactory.createTask(dayID, taskClass, name, details, finalised, points, deadline, deadlineCounter);
+                log.info("Task was loaded from databese to day: "+ day.getDate());
             }
 
         } catch (SQLException e) {
@@ -286,6 +288,20 @@ public class CalendarDatasource {
             log.error("Error took place while querying subtasks for task: " + task.getTaskName());
         }
 
+    }
+    public boolean checkTaskExistenceInDB(int dayID, String taskName){
+        String QUERY_TASK = "SELECT * FROM Tasks WHERE DayID=\"" + dayID + "\" AND Name=\"" + taskName+"\"";
+        String validation = null;
+        try(Statement statement = conn.createStatement()) {
+            statement.execute(QUERY_TASK);
+             ResultSet results = statement.getResultSet();
+
+           validation = results.getString(COLUMN_TASKS_NAME);
+
+        }catch (SQLException e) {
+            log.error("Error while looking for existence of task in DB. Message: " + e.getMessage());
+        }
+        return validation==null;
     }
 
 

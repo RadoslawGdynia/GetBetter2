@@ -5,7 +5,7 @@
         </encoder>
     </appender>
 
-    <logger name="com.RadoslawGdynia" level="DEBUG"/>
+    <logger name="com.RadoslawGdynia" level="ERROR"/>
 
     <root level="INFO">
         <appender-ref ref="STDOUT"/>

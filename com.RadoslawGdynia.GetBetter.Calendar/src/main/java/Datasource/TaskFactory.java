@@ -29,7 +29,7 @@ public class TaskFactory {
                 throw new IOException("Unknown Task class:" + className + ", impossible to add");
             }
         }catch( IOException e) {
-            log.debug("Error during task creation. \nMessage: " + e.getMessage());
+            log.error("Error during task creation. \nMessage: " + e.getMessage());
 
         }
     }

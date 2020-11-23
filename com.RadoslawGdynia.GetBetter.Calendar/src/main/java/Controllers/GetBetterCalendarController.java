@@ -26,7 +26,6 @@ import java.net.URL;
 import java.time.LocalDate;
 import java.time.format.TextStyle;
 import java.util.Locale;
-import java.util.Optional;
 
 public class GetBetterCalendarController {
 
@@ -89,13 +88,12 @@ public class GetBetterCalendarController {
     private Button DeleteTaskButton;
 
 
-
     //============== GENERAL METHODS: ==============
-    public GetBetterCalendarController(){
+    public GetBetterCalendarController() {
         instance = this;
     }
 
-    public static GetBetterCalendarController getInstance(){
+    public static GetBetterCalendarController getInstance() {
         return instance;
     }
 
@@ -114,7 +112,8 @@ public class GetBetterCalendarController {
     public Pane getTimePane() {
         return TimePane;
     }
-    public Label getShowDay(){
+
+    public Label getShowDay() {
         return showDay;
     }
 
@@ -155,7 +154,7 @@ public class GetBetterCalendarController {
             String idString = "CalendarTile" + i;
             Tile calendarTile;
             int dayNumber = (i - (firstDayOfMonth - 1));
-            String display = dayNumber+"";
+            String display = dayNumber + "";
             if ((i >= firstDayOfMonth) && (i < (numberOfDaysInCurrentMonth + firstDayOfMonth))) {
 
                 calendarTile = new Tile(daysTilePane, idString, display, size, size, new CalendarTile(dayNumber));
@@ -197,7 +196,7 @@ public class GetBetterCalendarController {
 
     //============== DAY DETAILS METHODS: ==============
 
-    private void noTaskSelected(){
+    private void noTaskSelected() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Missing information!");
         alert.setHeaderText("No task was chosen. Chosen action requires a selected task to be performed.");
@@ -213,7 +212,7 @@ public class GetBetterCalendarController {
         int hour2 = 7;
         StringBuilder text = new StringBuilder();
 
-        for(int i =1; i<=TILES_NUMBER; i++){
+        for (int i = 1; i <= TILES_NUMBER; i++) {
             text.append(hour1);
             text.append(":00");
             text.append("-");
@@ -221,7 +220,7 @@ public class GetBetterCalendarController {
             text.append(":");
             text.append(":00");
 
-            Tile timeTile = new Tile(TimePane, i+"", text.toString(), 100, (int)(TimePane.getHeight()/TILES_NUMBER), new TimeTile());
+            Tile timeTile = new Tile(TimePane, i + "", text.toString(), 100, (int) (TimePane.getHeight() / TILES_NUMBER), new TimeTile());
 
             hour1++;
             hour2++;
@@ -230,14 +229,14 @@ public class GetBetterCalendarController {
         }
 
     }
+
     public void configurePlanTiles() {
         final int TILES_NUMBER = 72;
-        for(int i =1; i<=TILES_NUMBER; i++) {
-            Tile planTile = new Tile(PlanningPane, i+"","Plan", 200, 9, new PlanTile());
+        for (int i = 1; i <= TILES_NUMBER; i++) {
+            Tile planTile = new Tile(PlanningPane, i + "", "Plan", 200, 9, new PlanTile());
         }
 
     }
-
 
 
     //============ B. TODAYS TASK METHODS: ================
@@ -262,7 +261,6 @@ public class GetBetterCalendarController {
         DeleteTaskButton.setDisable(false);
 
     }
-
 
 
     public void configureSubtasksTable() {
@@ -297,35 +295,41 @@ public class GetBetterCalendarController {
 //        subtasksTreeTable.setRoot(root);
 
 
-
     }
 
     public void handleAddTaskClick() {
         Dialog<ButtonType> dialog = new Dialog<>();
         dialog.setTitle("Addition of task to the day: " + selectedDay.getDate());
-        FXMLLoader fxmlLoader = new FXMLLoader((getClass().getResource("AddTaskDialog.fxml")));
+
 
         try {
             URL url = new File("com.RadoslawGdynia.GetBetter.Calendar/src/main/resources/AddTaskDialog.fxml").toURI().toURL();
-            dialog.getDialogPane().setContent(FXMLLoader.load(url));
-        } catch (IOException e) {
+            FXMLLoader fxmlLoader = new FXMLLoader();
+            dialog.getDialogPane().setContent(fxmlLoader.load(url));
+            dialog.showAndWait();
+//            dialog.getDialogPane().getButtonTypes().add(ButtonType.OK);
+//            dialog.getDialogPane().getButtonTypes().add(ButtonType.CANCEL);
+
+//            Optional<ButtonType> result = dialog.showAndWait();
+//            if (result.isPresent() && result.get() == ButtonType.OK) {
+//                AddTaskDialogController additionController = fxmlLoader.getController();
+//                Task toAdd = additionController.createTask();
+//                selectedDay.addTask(toAdd);
+//            }
+
+        } catch (NullPointerException e){
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Lack of information");
+                alert.setHeaderText("You are trying to create task without necessary information.");
+                alert.setContentText("Task name is required.");
+
+        } catch(IOException e) {
             log.error("Could not load the dialog");
             e.printStackTrace();
-            return;
         }
-        dialog.getDialogPane().getButtonTypes().add(ButtonType.OK);
-        dialog.getDialogPane().getButtonTypes().add(ButtonType.CANCEL);
-
-        Optional<ButtonType> result = dialog.showAndWait();
-        if (result.isPresent() && result.get() == ButtonType.OK) {
-            AddTaskDialogController newTaskToAdd = fxmlLoader.getController();
-            Task toAdd = newTaskToAdd.createTask();
-            selectedDay.addTask(toAdd);
-
-        }
-
 
     }
+
     public void handleAddSubtaskClick(ActionEvent event) {
 //        Task task = TVTasksTable.getSelectionModel().getSelectedItem();
 //        if (task == null) {
@@ -406,10 +410,6 @@ public class GetBetterCalendarController {
 //            //visibleTasks.removeVisibleTask(t);
 //        }
     }
-
-
-
-
 
 
 }
