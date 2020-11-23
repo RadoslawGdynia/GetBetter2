@@ -4,8 +4,12 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Tile extends StackPane  {
+
+    public static final Logger log = LoggerFactory.getLogger(Tile.class);
     private final Pane root;
     private final String ID;
 

@@ -8,6 +8,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.net.URL;
@@ -15,11 +17,13 @@ import java.net.URL;
 
 public class Main extends Application {
 
+    public static final Logger log = LoggerFactory.getLogger(Main.class);
+
 
     @Override
     public void init() throws Exception {
         if(!CalendarDatasource.getInstance().open()) {
-            System.out.println("FATAL ERROR during load of database"); //zmienić na okno dialogowe
+            log.error("FATAL ERROR during load of database"); //zmienić na okno dialogowe
             Platform.exit();
         }
         GetBetterCalendar.loadCalendar();

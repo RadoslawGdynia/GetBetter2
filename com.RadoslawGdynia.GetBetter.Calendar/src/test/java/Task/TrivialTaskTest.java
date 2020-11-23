@@ -4,12 +4,16 @@ import Day.Day;
 import javafx.beans.property.SimpleStringProperty;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class TrivialTaskTest {
+
+    public static final Logger log = LoggerFactory.getLogger(TrivialTaskTest.class);
     TrivialTask testTask;
 
 

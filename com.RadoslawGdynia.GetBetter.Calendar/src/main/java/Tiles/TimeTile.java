@@ -5,8 +5,12 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class TimeTile implements ITileModifier {
+
+    public static final Logger log = LoggerFactory.getLogger(TimeTile.class);
 
     public TimeTile() {
     }

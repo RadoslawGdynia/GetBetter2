@@ -4,6 +4,8 @@ import Datasource.CalendarDatasource;
 import Day.Day;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.time.LocalDate;
 import java.util.ConcurrentModificationException;
@@ -14,6 +16,8 @@ import java.util.Objects;
  * Object <code>CustomTask</code> represents things to do.
  */
 public class WorkTask extends Task implements Comparable<WorkTask> {
+
+    public static final Logger log = LoggerFactory.getLogger(WorkTask.class);
 
     //Visible properties
     private LocalDate deadline;

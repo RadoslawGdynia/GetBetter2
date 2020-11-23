@@ -5,11 +5,14 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class PlanTile implements ITileModifier {
 
-    public PlanTile() {
+    public static final Logger log = LoggerFactory.getLogger(PlanTile.class);
 
+    public PlanTile() {
     }
 
     @Override

@@ -3,10 +3,14 @@ package Task;
 import Day.Day;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.time.LocalDate;
 
 public abstract class Task {
+
+    public static final Logger log = LoggerFactory.getLogger(Task.class);
     private Day assignedToDay;
     private SimpleStringProperty taskName = new SimpleStringProperty("");
     private SimpleStringProperty details = new SimpleStringProperty("");
