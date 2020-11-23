@@ -1,0 +1,4 @@
+--patch-module
+com.RadoslawGdynia.GetBetter.Calendar=_
+--add-reads
+com.RadoslawGdynia.GetBetter.Calendar=ALL-UNNAMED
