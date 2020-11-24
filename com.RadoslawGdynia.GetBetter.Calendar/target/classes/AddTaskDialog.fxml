@@ -5,24 +5,23 @@
 
 <DialogPane prefHeight="413.0" prefWidth="603.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.AddTaskDialogController">
    <content>
-      <AnchorPane prefHeight="200.0" prefWidth="200.0">
+      <AnchorPane prefHeight="469.0" prefWidth="603.0">
          <children>
-            <Button fx:id="OKButton" layoutX="429.0" layoutY="354.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="60.0" text="OK" />
-            <fx:define>
-               <ToggleGroup fx:id="taskType" />
-            </fx:define>
-            <Button fx:id="CancelButton" layoutX="514.0" layoutY="354.0" mnemonicParsing="false" onAction="#handleCancelButton" prefHeight="25.0" prefWidth="60.0" text="Cancel" />
+            <Button fx:id="okButton" layoutX="429.0" layoutY="354.0" mnemonicParsing="false" onAction="#handleOKButton" prefHeight="25.0" prefWidth="60.0" text="OK" />
+            <Button fx:id="cancelButton" layoutX="514.0" layoutY="354.0" mnemonicParsing="false" onAction="#handleCancelButton" prefHeight="25.0" prefWidth="60.0" text="Cancel" />
             <RadioButton fx:id="radioTrivial" layoutX="196.0" layoutY="28.0" mnemonicParsing="false" onAction="#handleRadioTrivial" selected="true" text="Trivial Task">
                <toggleGroup>
                   <ToggleGroup fx:id="taskType" />
                </toggleGroup></RadioButton>
             <RadioButton fx:id="radioWork" layoutX="302.0" layoutY="28.0" mnemonicParsing="false" onAction="#handleRadioWork" text="Work Task" toggleGroup="$taskType" />
-            <Label layoutX="34.0" layoutY="77.0" prefHeight="23.0" prefWidth="93.0" text="Task Name" />
-            <Label layoutX="34.0" layoutY="134.0" text="Task Details" />
-            <Label fx:id="deadlineLabel" disable="true" layoutX="34.0" layoutY="293.0" text="Deadline" />
+            <Label layoutX="34.0" layoutY="77.0" prefHeight="23.0" prefWidth="93.0" text="Task Name*" />
+            <Label layoutX="34.0" layoutY="134.0" text="Task Details*" />
+            <Label fx:id="deadlineLabel" layoutX="34.0" layoutY="293.0" text="Deadline*" />
             <TextArea fx:id="details" layoutX="119.0" layoutY="118.0" prefHeight="148.0" prefWidth="457.0" />
             <TextField fx:id="taskName" layoutX="122.0" layoutY="76.0" prefHeight="25.0" prefWidth="452.0" />
             <DatePicker fx:id="deadlineDate" disable="true" layoutX="115.0" layoutY="289.0" />
+            <Label fx:id="warningLabel" layoutX="52.0" layoutY="359.0" prefHeight="38.0" prefWidth="335.0" text="Label" textFill="#c93a0e" />
+            <Label layoutX="44.0" layoutY="330.0" prefHeight="17.0" prefWidth="268.0" text="* - information necessary to create Task" />
          </children>
       </AnchorPane>
    </content>

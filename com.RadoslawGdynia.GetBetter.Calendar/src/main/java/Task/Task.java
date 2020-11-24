@@ -24,7 +24,6 @@ public abstract class Task {
         this.assignedToDay = day;
         this.finalised.set(false);
         this.pointValue = 1;
-        day.addTask(this);
 
     }
 

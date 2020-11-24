@@ -26,6 +26,7 @@ import java.net.URL;
 import java.time.LocalDate;
 import java.time.format.TextStyle;
 import java.util.Locale;
+import java.util.Optional;
 
 public class GetBetterCalendarController {
 
@@ -75,17 +76,13 @@ public class GetBetterCalendarController {
     private TableView<Task> TVTasksTable;
     @FXML
     private TableColumn<Task, String> TVTaskName;
-    @FXML
-    private TableColumn<Task, String> TVTaskDeadline;
-    @FXML
-    private TableColumn<Task, Integer> TVNumberOfSubtasks;
 
     @FXML
-    private Button AddTaskButton;
+    private Button addTaskButton;
     @FXML
-    private Button EditTaskButton;
+    private Button editTaskButton;
     @FXML
-    private Button DeleteTaskButton;
+    private Button deleteTaskButton;
 
 
     //============== GENERAL METHODS: ==============
@@ -245,8 +242,6 @@ public class GetBetterCalendarController {
     public void configureTasksTable() {
         TVTasksTable.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         TVTaskName.setCellValueFactory(new PropertyValueFactory<Task, String>("taskName"));
-        TVTaskDeadline.setCellValueFactory(new PropertyValueFactory<Task, String>("deadline"));
-        TVNumberOfSubtasks.setCellValueFactory(new PropertyValueFactory<Task, Integer>("subtaskQuantity"));
 
         TVTasksTable.setItems(selectedDay.getTodayTasks());
     }
@@ -254,11 +249,17 @@ public class GetBetterCalendarController {
     public void handleTaskSelection(MouseEvent mouseEvent) {
         Task cTask = TVTasksTable.getSelectionModel().getSelectedItem();
         log.info("Currently selected task: " + cTask.getTaskName());
+        addTaskButton.setDisable(false);
+        editTaskButton.setDisable(false);
+        deleteTaskButton.setDisable(false);
+        if(cTask.getClass().getSimpleName().equals("TrivialTask")){
+            addTaskButton.setDisable(true);
+        }
+
+
         //  subtasksTreeTable.setDisable(false);
 
-        AddTaskButton.setDisable(false);
-        EditTaskButton.setDisable(false);
-        DeleteTaskButton.setDisable(false);
+
 
     }
 
@@ -306,16 +307,8 @@ public class GetBetterCalendarController {
             URL url = new File("com.RadoslawGdynia.GetBetter.Calendar/src/main/resources/AddTaskDialog.fxml").toURI().toURL();
             FXMLLoader fxmlLoader = new FXMLLoader();
             dialog.getDialogPane().setContent(fxmlLoader.load(url));
-            dialog.showAndWait();
-//            dialog.getDialogPane().getButtonTypes().add(ButtonType.OK);
-//            dialog.getDialogPane().getButtonTypes().add(ButtonType.CANCEL);
-
-//            Optional<ButtonType> result = dialog.showAndWait();
-//            if (result.isPresent() && result.get() == ButtonType.OK) {
-//                AddTaskDialogController additionController = fxmlLoader.getController();
-//                Task toAdd = additionController.createTask();
-//                selectedDay.addTask(toAdd);
-//            }
+            dialog.show();
+            //dialog.showAndWait();
 
         } catch (NullPointerException e){
                 Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -360,55 +353,44 @@ public class GetBetterCalendarController {
     }
 
     public void handleEditTaskClick() {
-//        Task task = TVTasksTable.getSelectionModel().getSelectedItem();
-//        if(task == null){
-//            noTaskSelected();
-//            return;
-//        } else {
-//            Controllers.EditTaskDialogController.setSelectedTask(task);
-//
-//            Dialog<ButtonType> dialog = new Dialog<>();
-//            dialog.setTitle("Editing task: " + task.getTaskName());
-//            FXMLLoader fxmlLoader = new FXMLLoader();
-//            fxmlLoader.setLocation(getClass().getResource("EditTaskDialog.fxml"));
-//
-//            try {
-//                dialog.getDialogPane().setContent(fxmlLoader.load());
-//            } catch (IOException e) {
-//                System.out.println("Could not load the dialog");
-//                e.printStackTrace();
-//                return;
-//            }
-//            dialog.getDialogPane().getButtonTypes().add(ButtonType.APPLY);
-//            dialog.getDialogPane().getButtonTypes().add(ButtonType.CANCEL);
-//
-//            Controllers.EditTaskDialogController ETDialogController = fxmlLoader.getController();
-//
-//            Optional<ButtonType> result = dialog.showAndWait();
-//            if (result.isPresent() && result.get() == ButtonType.APPLY) {
-//               ETDialogController.handleApplyChangesButton();
-//
-//            }
-//        }
+        Task task = TVTasksTable.getSelectionModel().getSelectedItem();
+        if(task == null){
+            noTaskSelected();
+        } else {
+            Controllers.EditTaskDialogController.setSelectedTask(task);
+            Dialog<ButtonType> dialog = new Dialog<>();
+            dialog.setTitle("Editing task: " + task.getTaskName());
+
+
+            try {
+                URL url = new File("com.RadoslawGdynia.GetBetter.Calendar/src/main/resources/EditTaskDialog.fxml").toURI().toURL();
+                FXMLLoader fxmlLoader = new FXMLLoader();
+                dialog.getDialogPane().setContent(fxmlLoader.load(url));
+                dialog.showAndWait();
+            } catch (IOException e) {
+                System.out.println("Could not load the dialog");
+                e.printStackTrace();
+            }
+        }
     }
 
     public void handleDeleteTaskClick(ActionEvent event) {
-//
-//        Task task = TVTasksTable.getSelectionModel().getSelectedItem();
-//        deleteTask(task);
+
+        Task task = TVTasksTable.getSelectionModel().getSelectedItem();
+        deleteTask(task);
     }
 
     public void deleteTask(Task t) {
-//        Alert a = new Alert(Alert.AlertType.CONFIRMATION);
-//        a.setTitle("Task deletion");
-//        a.setHeaderText("You intend to delete task: " + t.getTaskName());
-//        a.setContentText("Are you sure you want to proceed? This operation is irreversible and you put this task in for a good reason");
-//        Optional<ButtonType> result = a.showAndWait();
-//
-//        if (result.isPresent() && result.get() == ButtonType.OK) {
-//            selectedDay.removeTask(t);
-//            //visibleTasks.removeVisibleTask(t);
-//        }
+        Alert a = new Alert(Alert.AlertType.CONFIRMATION);
+        a.setTitle("Task deletion");
+        a.setHeaderText("You intend to delete task: " + t.getTaskName());
+        a.setContentText("Are you sure you want to proceed? This operation is irreversible and you have put this task in the calendar for a good reason");
+        Optional<ButtonType> result = a.showAndWait();
+
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            selectedDay.removeTask(t);
+            //visibleTasks.removeVisibleTask(t);
+        }
     }
 
 
