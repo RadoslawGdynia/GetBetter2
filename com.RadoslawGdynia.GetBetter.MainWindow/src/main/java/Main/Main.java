@@ -2,6 +2,7 @@ package Main;
 
 import CalendarControl.GetBetterCalendar;
 import Datasource.CalendarDatasource;
+import Datasource.TaskDatasource;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -23,9 +24,10 @@ public class Main extends Application {
     @Override
     public void init() throws Exception {
         if(!CalendarDatasource.getInstance().open()) {
-            log.error("FATAL ERROR during load of database"); //zmienić na okno dialogowe
             Platform.exit();
+            log.error("Connecton to DataBase cound not be established");
         }
+        TaskDatasource.getInstance().open();
         GetBetterCalendar.loadCalendar();
     }
 
@@ -36,14 +38,12 @@ public class Main extends Application {
         primaryStage.setTitle("GetBetter!");
         primaryStage.setScene(new Scene(root, 400, 600));
 
-
         primaryStage.show();
     }
 
 
     public static void main(String[] args) {
        launch(args);
-      // GetBetterCalendar.saveCalendar();
 
     }
 
@@ -51,5 +51,7 @@ public class Main extends Application {
     @Override
     public void stop() throws Exception {
         CalendarDatasource.getInstance().close();
+        TaskDatasource.getInstance().close();
+
     }
 }

@@ -1,6 +1,6 @@
 package Task;
 
-import Datasource.CalendarDatasource;
+import Datasource.TaskDatasource;
 import Day.Day;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -34,10 +34,9 @@ public class WorkTask extends Task implements Comparable<WorkTask> {
         super(day, taskName, details);
         this.deadline = deadline;
         this.subtasks = FXCollections.observableArrayList();
-
-
         this.setPointValue(1 + (int) (Math.random() * 10));
         this.deadlineChangeCounter = 0;
+        day.addTask(this);
 
     }
 
@@ -52,7 +51,7 @@ public class WorkTask extends Task implements Comparable<WorkTask> {
 
         this.setPointValue(pointValue);
         this.deadlineChangeCounter = deadlineChangeCounter;
-
+        day.addTask(this);
     }
 
     public LocalDate getDeadline() {
@@ -72,7 +71,7 @@ public class WorkTask extends Task implements Comparable<WorkTask> {
         if (done) {
             for (Task sub : subtasks) {
                 if (!sub.getFinalised()) {
-                    System.out.println("Jedno lub więcej podzadań jest nieukończonych. Zakończ najpierw wszystkie podzadania by zamknąć zadanie.");
+                    log.info("One or more subtasks are not fulfilled. Finish all subtasks in order to close this task.");
                     return false;
                 }
             }
@@ -115,7 +114,7 @@ public class WorkTask extends Task implements Comparable<WorkTask> {
                 }
             }
             this.subtasks.add(added);
-            CalendarDatasource.getInstance().addSubtaskToDB(this, added);
+            TaskDatasource.getInstance().addSubtaskToDB(this, added);
 
         } catch (NullPointerException e) {
             System.out.println("Problem przy dodawaniu podzadania");
