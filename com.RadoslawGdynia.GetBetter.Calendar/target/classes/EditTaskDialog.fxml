@@ -5,12 +5,7 @@
 <?import javafx.scene.text.*?>
 
 <DialogPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.EditTaskDialogController">
-<headerText>
-    Use this window to EDIT chosen task.
-</headerText>
-<content>
-    
-</content>
+
    <content>
       <AnchorPane prefHeight="200.0" prefWidth="200.0">
          <children>
@@ -19,10 +14,12 @@
                <font>
                   <Font size="10.0" />
                </font></Label>
-            <TextField fx:id="taskDetailsText" alignment="TOP_LEFT" layoutX="21.0" layoutY="130.0" prefHeight="115.0" prefWidth="561.0" />
-            <DatePicker fx:id="ETDatePicker" layoutX="18.0" layoutY="305.0" prefHeight="35.0" prefWidth="576.0" />
+            <TextField fx:id="taskDetailsText" alignment="TOP_LEFT" layoutX="82.0" layoutY="130.0" prefHeight="115.0" prefWidth="500.0" />
+            <DatePicker fx:id="ETDatePicker" layoutX="84.0" layoutY="305.0" prefHeight="35.0" prefWidth="498.0" />
             <Label fx:id="ETTaskNameLabel" layoutX="21.0" layoutY="47.0" prefHeight="36.0" prefWidth="129.0" text="Label" />
-            <TextField fx:id="ETTaskNameField" layoutX="165.0" layoutY="53.0" prefHeight="25.0" prefWidth="273.0" />
+            <TextField fx:id="ETTaskNameField" layoutX="86.0" layoutY="53.0" prefHeight="25.0" prefWidth="273.0" />
+            <Button layoutX="421.0" layoutY="385.0" mnemonicParsing="false" onAction="#handleApplyButton" prefHeight="25.0" prefWidth="79.0" text="Apply" />
+            <Button fx:id="cancelButton" layoutX="516.0" layoutY="385.0" mnemonicParsing="false" onAction="#handleCancelButton" prefHeight="25.0" prefWidth="79.0" text="Cancel" />
          </children>
       </AnchorPane>
    </content>
