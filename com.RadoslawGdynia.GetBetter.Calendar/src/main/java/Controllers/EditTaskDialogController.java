@@ -1,15 +1,16 @@
 package Controllers;
 
+import Datasource.TaskDatasource;
+import Day.Day;
 import Task.Task;
 import Task.WorkTask;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.time.LocalDate;
 
 public class EditTaskDialogController {
 
@@ -24,13 +25,15 @@ public class EditTaskDialogController {
     @FXML
     Label TaskDetailsLabel;
     @FXML
-    TextField taskDetailsText;
+    TextField ETDetailsText;
     @FXML
     Label taskDeadlineLabel;
     @FXML
     DatePicker ETDatePicker;
     @FXML
     Button cancelButton;
+    @FXML
+    Button applyButton;
 
 
     public static void setSelectedTask(Task sTask) {
@@ -38,10 +41,7 @@ public class EditTaskDialogController {
     }
 
     public void initialize() {
-        TaskDetailsLabel.setText("By changing content of the text and date below you will implement changes in task " + selectedTask.getTaskName());
-        taskDetailsText.appendText(selectedTask.getDetails());
-
-        ETTaskNameLabel.setText("Name of the task: ");
+        ETDetailsText.appendText(selectedTask.getDetails());
         ETTaskNameField.setText(selectedTask.getTaskName());
         taskDeadlineLabel.setVisible(false);
         ETDatePicker.setVisible(false);
@@ -58,20 +58,36 @@ public class EditTaskDialogController {
 
      }
 
-     public void handleApplyButton(){
-        String previousDetails = selectedTask.getDetails();
-       //  LocalDate previousDeadline = selectedTask.getDeadline();
+     public void handleApplyButton() {
+        String newName = ETTaskNameField.getText().trim();
+        String newDetails = ETDetailsText.getText().trim();
+        LocalDate newDeadline = ETDatePicker.getValue();
+        Day dayOfSelectedTask = selectedTask.getAssignedToDay();
+        if((!selectedTask.getTaskName().equals(newName)) && dayOfSelectedTask.taskNameUsed(newName)){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Illegal name");
+            alert.setHeaderText("Name of the task you have chosen is already used in day: " + dayOfSelectedTask.getDate());
+            alert.setContentText("Task name has to be unique for a given day. Please insert one that is not being used");
+            alert.showAndWait();
+            return;
+        }
+        TaskDatasource.getInstance().editTaskNAMEandDETAILSInDB(selectedTask, newName, newDetails);
+        selectedTask.editTaskName(newName);
+        selectedTask.editTaskDetails(newDetails);
 
-         if(!selectedTask.getTaskName().equals(ETTaskNameField.getText().trim())) {
-             selectedTask.editTaskName(ETTaskNameField.getText().trim());
-         }
-         else if((!previousDetails.equals(taskDetailsText.getText().trim()))){
-             selectedTask.editTaskDetails(taskDetailsText.getText().trim());
-         }
-//         else if (previousDeadline != ETDatePicker.getValue()) {
-//             selectedTask.editTaskDeadline(ETDatePicker.getValue());
-//         }
+
+        if(selectedTask.getClass().getSimpleName().equals("WorkTask")){
+            WorkTask wt = (WorkTask) selectedTask;
+            if(!newDeadline.isEqual(wt.getDeadline())) {
+                wt.editTaskDeadline(newDeadline);
+                TaskDatasource.getInstance().editTaskDEADLINEInDB(wt, newDeadline);
+            }
+        }
+         Stage stage = (Stage) applyButton.getScene().getWindow();
+         stage.close();
+
      }
+
      public void handleCancelButton() {
          Stage stage = (Stage) cancelButton.getScene().getWindow();
          stage.close();

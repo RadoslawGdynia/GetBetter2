@@ -1,6 +1,6 @@
 package Tiles;
 
-import CalendarControl.GetBetterCalendar;
+import CalendarWindow.GetBetterCalendar;
 import Controllers.GetBetterCalendarController;
 import Datasource.TaskDatasource;
 import Day.Day;

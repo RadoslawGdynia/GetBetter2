@@ -1,6 +1,6 @@
 package Datasource;
 
-import CalendarControl.GetBetterCalendar;
+import CalendarWindow.GetBetterCalendar;
 import Day.Day;
 import Task.Subtask;
 import Task.Task;
@@ -44,8 +44,10 @@ public class TaskFactory {
             log.error("Unsupported form of Task cannot be created. Name of class user intended to create: " + className);
         }
     }
-    public static Subtask createSubtask(int dayID, String name, String details, boolean finalised, WorkTask parent){
+    public static Subtask reloadSubtask(int dayID, String name, String details, boolean finalised, WorkTask parent){
         return new Subtask(GetBetterCalendar.getDays().get(dayID-1),name,details,parent);
-
+    }
+    public static void createNewSubtask(Day day, WorkTask parent, String name, String details){
+        Subtask subtask = new Subtask(day, name, details, parent);
     }
 }

@@ -1,4 +1,4 @@
-package CalendarControl;
+package CalendarWindow;
 
 import Datasource.CalendarDatasource;
 import Day.Day;
