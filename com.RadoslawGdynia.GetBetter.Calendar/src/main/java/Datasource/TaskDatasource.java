@@ -218,7 +218,7 @@ public class TaskDatasource {
                 String details = results.getString(COLUMN_SUBTASKS_DETAILS);
                 boolean finalised = Boolean.parseBoolean(results.getString(COLUMN_SUBTASKS_FINALISED));
                 WorkTask parent = (WorkTask) task;
-                TaskFactory.createSubtask(dayID, name, details,finalised, parent);
+                TaskFactory.reloadSubtask(dayID, name, details,finalised, parent);
 
             }
         }catch (SQLException e) {
@@ -242,7 +242,7 @@ public class TaskDatasource {
     }
     public void editTaskNAMEandDETAILSInDB(Task task, String name, String details) {
         int dayID = task.getAssignedToDay().getDayID();
-        String NAME_UPDATE = "UPDATE \"" + TABLE_TASKS + "\" SET \"" + COLUMN_TASKS_NAME + "\"=\"" + name + "\", \"" + COLUMN_TASKS_DETAILS + "\"=\"" + details +
+        String NAME_UPDATE = "UPDATE " + TABLE_TASKS + " SET " + COLUMN_TASKS_NAME + "=\"" + name + "\", " + COLUMN_TASKS_DETAILS + "=\"" + details +
                 "\" WHERE DayID=\"" + dayID + "\" AND Tasks.Name=\"" + task.getTaskName() + "\"";
 
         try (Statement statement = conn.createStatement()) {

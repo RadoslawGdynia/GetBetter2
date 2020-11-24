@@ -94,10 +94,10 @@ public class WorkTask extends Task implements Comparable<WorkTask> {
         if (this.deadlineChangeCounter <= 2) {
             this.deadlineChangeCounter++;
             this.setDeadline(date);
-            System.out.println("Data deadline została zmieniona na " + date.toString() + ". Ilość możliwych do przeprowadzenia zmian: " + (3 - deadlineChangeCounter));
+            log.info("Deadline date was changed to: " + date.toString() + ". Number of possible deadline changes left: " + (3 - deadlineChangeCounter));
 
         } else {
-            System.out.println("Przekroczono maksymalną liczbę zmian deadline. Operacja odrzucona.");
+            log.info("Maximum number of deadline changes has been reached. You have to do it now!");
         }
     }
 
@@ -108,8 +108,8 @@ public class WorkTask extends Task implements Comparable<WorkTask> {
         try {
             for (Subtask sub : this.subtasks) {
                 if (sub.equals(added)) {
-                    System.out.println("Zadanie " + this.getTaskName() + " już zawiera " + added.getTaskName() +
-                            "\nOperacja przerwana.");
+                    log.info("Task " + this.getTaskName() + " already has subtask " + added.getTaskName() +
+                            "\nOperation rejected.");
                     return;
                 }
             }
@@ -117,7 +117,7 @@ public class WorkTask extends Task implements Comparable<WorkTask> {
             TaskDatasource.getInstance().addSubtaskToDB(this, added);
 
         } catch (NullPointerException e) {
-            System.out.println("Problem przy dodawaniu podzadania");
+            log.error("Problem with subtask addition");
         }
     }
 
@@ -128,23 +128,23 @@ public class WorkTask extends Task implements Comparable<WorkTask> {
         try {
             int initialSubtasksNumber = this.getSubtasks().size();
             if (this.subtasks.isEmpty()) {
-                System.out.println("List of subtasks for this task is empty. Operation rejected");
+                log.info("List of subtasks for this task is empty. Operation rejected");
             } else {
                 for (Subtask verification : this.subtasks) {
                     if (toDelete.equals(verification)) {
                         this.subtasks.remove(verification);
-                        System.out.println("Subtask " + toDelete.getTaskName() + " was deleted from " + this.getTaskName());
+                        log.info("Subtask " + toDelete.getTaskName() + " was deleted from " + this.getTaskName());
                         return;
                     }
                 }
                 if (this.getSubtasks().size() == initialSubtasksNumber) {
-                    System.out.println(this.getTaskName() + " does not have subtask " + toDelete.getTaskName() + ". Operation rejected.");
+                    log.info(this.getTaskName() + " does not have subtask " + toDelete.getTaskName() + ". Operation rejected.");
                 }
             }
         } catch (ConcurrentModificationException e) {
             System.out.println();
         } catch (Exception e) {
-            System.out.println("Error during deletion of subtask: " + e.getMessage());
+            log.error("Error during deletion of subtask: " + e.getMessage());
             e.printStackTrace();
         }
     }

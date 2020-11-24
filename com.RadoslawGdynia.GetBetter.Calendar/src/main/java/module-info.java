@@ -5,7 +5,7 @@ open module  com.RadoslawGdynia.GetBetter.Calendar {
     requires java.sql;
     requires slf4j.api;
 
-    exports CalendarControl;
+    exports CalendarWindow;
     exports Datasource;
     exports Day;
     exports Controllers;

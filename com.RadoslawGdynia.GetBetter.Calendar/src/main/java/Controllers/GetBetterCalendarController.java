@@ -1,8 +1,9 @@
 package Controllers;
 
-import CalendarControl.GetBetterCalendar;
+import CalendarWindow.GetBetterCalendar;
 import Day.Day;
 import Task.Task;
+import Task.WorkTask;
 import Tiles.CalendarTile;
 import Tiles.PlanTile;
 import Tiles.Tile;
@@ -218,7 +219,6 @@ public class GetBetterCalendarController {
             text.append(":00");
 
             Tile timeTile = new Tile(TimePane, i + "", text.toString(), 100, (int) (TimePane.getHeight() / TILES_NUMBER), new TimeTile());
-
             hour1++;
             hour2++;
 
@@ -242,12 +242,14 @@ public class GetBetterCalendarController {
     public void configureTasksTable() {
         TVTasksTable.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         TVTaskName.setCellValueFactory(new PropertyValueFactory<Task, String>("taskName"));
-
         TVTasksTable.setItems(selectedDay.getTodayTasks());
     }
 
     public void handleTaskSelection(MouseEvent mouseEvent) {
         Task cTask = TVTasksTable.getSelectionModel().getSelectedItem();
+        if(cTask==null){
+            return;
+        }
         log.info("Currently selected task: " + cTask.getTaskName());
         addTaskButton.setDisable(false);
         editTaskButton.setDisable(false);
@@ -255,26 +257,15 @@ public class GetBetterCalendarController {
         if(cTask.getClass().getSimpleName().equals("TrivialTask")){
             addTaskButton.setDisable(true);
         }
-
-
-        //  subtasksTreeTable.setDisable(false);
-
-
-
+        subtasksTreeTable.setDisable(false);
     }
 
 
     public void configureSubtasksTable() {
         TreeItem<Task> root = new TreeItem<>();
 
-        subtaskNameColumn.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Task, String>, ObservableValue<String>>() {
-            @Override
-            public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<Task, String> taskStringCellDataFeatures) {
-                return new SimpleStringProperty(taskStringCellDataFeatures.getValue().getValue().getTaskName());
-            }
-
-
-        });
+        subtaskNameColumn.setCellValueFactory((Callback<TreeTableColumn.CellDataFeatures<Task, String>, ObservableValue<String>>)
+                taskStringCellDataFeatures -> new SimpleStringProperty(taskStringCellDataFeatures.getValue().getValue().getTaskName()));
 
 //        subtaskDeadlineColumn.setCellValueFactory(taskStringCellDataFeatures -> {
 //            if (taskStringCellDataFeatures == null) {
@@ -305,10 +296,8 @@ public class GetBetterCalendarController {
 
         try {
             URL url = new File("com.RadoslawGdynia.GetBetter.Calendar/src/main/resources/AddTaskDialog.fxml").toURI().toURL();
-            FXMLLoader fxmlLoader = new FXMLLoader();
-            dialog.getDialogPane().setContent(fxmlLoader.load(url));
-            dialog.show();
-            //dialog.showAndWait();
+            dialog.getDialogPane().setContent(FXMLLoader.load(url));
+            dialog.showAndWait();
 
         } catch (NullPointerException e){
                 Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -324,32 +313,24 @@ public class GetBetterCalendarController {
     }
 
     public void handleAddSubtaskClick(ActionEvent event) {
-//        Task task = TVTasksTable.getSelectionModel().getSelectedItem();
-//        if (task == null) {
-//            noTaskSelected();
-//        } else {
-//            Dialog<ButtonType> dialog = new Dialog<>();
-//            dialog.setTitle("Addition of subtask to task: " + task.getTaskName());
-//            FXMLLoader fxmlLoader = new FXMLLoader();
-//            fxmlLoader.setLocation(getClass().getResource("AddTaskDialog.fxml"));
-//
-//            try {
-//                dialog.getDialogPane().setContent(fxmlLoader.load());
-//            } catch (IOException e) {
-//                System.out.println("Could not load the dialog");
-//                e.printStackTrace();
-//                return;
-//            }
-//            dialog.getDialogPane().getButtonTypes().add(ButtonType.OK);
-//            dialog.getDialogPane().getButtonTypes().add(ButtonType.CANCEL);
-//
-//            Optional<ButtonType> result = dialog.showAndWait();
-//            if (result.isPresent() && result.get() == ButtonType.OK) {
-//                GetBetter.Kalendarz.Controllers.AddTaskDialogController newTaskToAdd = fxmlLoader.getController();
-//                Task toAdd = newTaskToAdd.createTask();
-//                task.addSubtask(toAdd);
-//            }
-//        }
+        Task task = TVTasksTable.getSelectionModel().getSelectedItem();
+        if (task == null) {
+            noTaskSelected();
+        } else {
+            WorkTask wt = (WorkTask) task;
+            Controllers.AddSubtaskController.setSelectedWorkTask(wt);
+            Dialog<ButtonType> dialog = new Dialog<>();
+            dialog.setTitle("Addition of subtask to task: " + task.getTaskName());
+            try {
+                URL url = new File("com.RadoslawGdynia.GetBetter.Calendar/src/main/resources/AddSubtaskDialog.fxml").toURI().toURL();
+                dialog.getDialogPane().setContent(FXMLLoader.load(url));
+                dialog.showAndWait();
+
+            } catch (IOException e) {
+                log.error("Could not load the dialog");
+                e.printStackTrace();
+            }
+        }
     }
 
     public void handleEditTaskClick() {
@@ -364,11 +345,10 @@ public class GetBetterCalendarController {
 
             try {
                 URL url = new File("com.RadoslawGdynia.GetBetter.Calendar/src/main/resources/EditTaskDialog.fxml").toURI().toURL();
-                FXMLLoader fxmlLoader = new FXMLLoader();
-                dialog.getDialogPane().setContent(fxmlLoader.load(url));
+                dialog.getDialogPane().setContent(FXMLLoader.load(url));
                 dialog.showAndWait();
             } catch (IOException e) {
-                System.out.println("Could not load the dialog");
+                log.error("Could not load the dialog");
                 e.printStackTrace();
             }
         }
@@ -389,7 +369,6 @@ public class GetBetterCalendarController {
 
         if (result.isPresent() && result.get() == ButtonType.OK) {
             selectedDay.removeTask(t);
-            //visibleTasks.removeVisibleTask(t);
         }
     }
 

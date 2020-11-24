@@ -1,6 +1,6 @@
 package Main;
 
-import CalendarControl.GetBetterCalendar;
+import CalendarWindow.GetBetterCalendar;
 import Datasource.CalendarDatasource;
 import Datasource.TaskDatasource;
 import javafx.application.Application;

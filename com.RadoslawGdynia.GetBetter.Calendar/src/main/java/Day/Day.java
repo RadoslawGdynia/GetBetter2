@@ -1,6 +1,6 @@
 package Day;
 
-import CalendarControl.GetBetterCalendar;
+import CalendarWindow.GetBetterCalendar;
 import Datasource.CalendarDatasource;
 import Datasource.TaskDatasource;
 import Task.Task;
@@ -102,6 +102,14 @@ public class Day {
     private boolean findTask(Task sought) {
         for (Task task : todayTasks) {
             if (sought.equals(task)) {
+                return true;
+            }
+        }
+        return false;
+    }
+    public boolean taskNameUsed(String sought) {
+        for (Task task : todayTasks) {
+            if (sought.equals(task.getTaskName())) {
                 return true;
             }
         }
