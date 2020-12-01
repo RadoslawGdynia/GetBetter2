@@ -1,6 +1,6 @@
-package Datasource;
+package Datasources;
 
-import CalendarWindow.GetBetterCalendar;
+import Calendar.GetBetterCalendar;
 import Day.Day;
 import Task.Subtask;
 import Task.Task;

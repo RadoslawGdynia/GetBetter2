@@ -38,7 +38,7 @@ public abstract class Task {
         return taskName.getValue();
     }
 
-    public SimpleStringProperty getVisibleTaskName() {
+    public SimpleStringProperty getObservableTaskName() {
         return taskName;
     }
 
@@ -46,7 +46,7 @@ public abstract class Task {
         return details.getValue();
     }
 
-    public SimpleStringProperty getVisibleDetails() {
+    public SimpleStringProperty getObservableDetails() {
         return details;
     }
 
@@ -54,7 +54,7 @@ public abstract class Task {
         return finalised.get();
     }
 
-    public SimpleBooleanProperty getVisibleFinalised() {
+    public SimpleBooleanProperty getObservableFinalised() {
         return finalised;
     }
 

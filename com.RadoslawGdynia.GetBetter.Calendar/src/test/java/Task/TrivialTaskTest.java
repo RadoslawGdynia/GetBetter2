@@ -41,7 +41,7 @@ class TrivialTaskTest {
     @Test
     void getVisibleTaskName() {
         SimpleStringProperty verify = new SimpleStringProperty("ZadanieTestowe");
-        assertEquals(verify.get(), testTask.getVisibleTaskName().get());
+        assertEquals(verify.get(), testTask.getObservableTaskName().get());
     }
 
     @Test
@@ -52,7 +52,7 @@ class TrivialTaskTest {
     @Test
     void getVisibleDetails() {
         SimpleStringProperty verify = new SimpleStringProperty("Szczegóły niniejszego zadania są zawarte wyłącznie w celach testowych");
-        assertEquals(verify.get(), testTask.getVisibleDetails().get());
+        assertEquals(verify.get(), testTask.getObservableDetails().get());
     }
 
     @Test
@@ -62,7 +62,7 @@ class TrivialTaskTest {
 
     @Test
     void getVisibleFinalised() {
-        assertFalse(testTask.getVisibleFinalised().get());
+        assertFalse(testTask.getObservableFinalised().get());
     }
 
     @Test

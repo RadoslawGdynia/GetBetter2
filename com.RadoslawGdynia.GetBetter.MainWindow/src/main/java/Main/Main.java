@@ -1,8 +1,8 @@
 package Main;
 
-import CalendarWindow.GetBetterCalendar;
-import Datasource.CalendarDatasource;
-import Datasource.TaskDatasource;
+import Calendar.GetBetterCalendar;
+import Datasources.CalendarDatasource;
+import Datasources.TaskDatasource;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;

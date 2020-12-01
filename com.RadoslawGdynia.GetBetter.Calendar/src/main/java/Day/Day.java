@@ -1,8 +1,8 @@
 package Day;
 
-import CalendarWindow.GetBetterCalendar;
-import Datasource.CalendarDatasource;
-import Datasource.TaskDatasource;
+import Calendar.GetBetterCalendar;
+import Datasources.CalendarDatasource;
+import Datasources.TaskDatasource;
 import Task.Task;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;

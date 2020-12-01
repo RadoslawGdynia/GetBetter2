@@ -1,8 +1,8 @@
 package Tiles;
 
-import CalendarWindow.GetBetterCalendar;
+import Calendar.GetBetterCalendar;
 import Controllers.GetBetterCalendarController;
-import Datasource.TaskDatasource;
+import Datasources.TaskDatasource;
 import Day.Day;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -56,15 +56,16 @@ public class CalendarTile implements ITileModifier {
         GetBetterCalendarController.getInstance().setSelectedDay(clickedDay);
         GetBetterCalendarController.getInstance().getShowDay().setText("Plans for: " + clickedDay.getDate());
 
-        TaskDatasource.getInstance().loadTasksOfDay(clickedDay);
+        if(clickedDay.getTodayTasks().size()<clickedDay.getTaskNumber())  TaskDatasource.getInstance().loadTasksOfDay(clickedDay);
 
         Pane TimePane = GetBetterCalendarController.getInstance().getTimePane();
         Pane PlanningPane = GetBetterCalendarController.getInstance().getPlanningPane();
+
         GetBetterCalendarController.getInstance().getDetailsTabPane().setDisable(false);
+
         TimePane.getChildren().remove(0, TimePane.getChildren().size());
         PlanningPane.getChildren().remove(0, PlanningPane.getChildren().size());
         GetBetterCalendarController.getInstance().configureTasksTable();
-        GetBetterCalendarController.getInstance().configureSubtasksTable();
         GetBetterCalendarController.getInstance().configureTimeTiles();
         GetBetterCalendarController.getInstance().configurePlanTiles();
 

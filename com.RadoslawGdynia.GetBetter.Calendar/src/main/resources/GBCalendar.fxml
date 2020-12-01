@@ -20,8 +20,8 @@
                            <ColorPicker layoutX="49.0" layoutY="68.0" prefHeight="25.0" prefWidth="151.0" />
                         </children>
                      </AnchorPane>
-                     <TilePane fx:id="TimePane" layoutX="78.0" layoutY="120.0" prefColumns="1" prefHeight="650.0" prefRows="72" prefTileHeight="36.0" prefTileWidth="100.0" prefWidth="100.0" style="-fx-background-color: White;" tileAlignment="TOP_LEFT" AnchorPane.topAnchor="120.0" />
-                     <TilePane fx:id="PlanningPane" layoutX="178.0" layoutY="120.0" maxWidth="-Infinity" prefColumns="1" prefHeight="650.0" prefRows="72" prefTileHeight="9.0" prefTileWidth="200.0" prefWidth="200.0" style="-fx-background-color: White;" AnchorPane.topAnchor="120.0" />
+                     <TilePane fx:id="timePane" layoutX="78.0" layoutY="120.0" prefColumns="1" prefHeight="650.0" prefRows="72" prefTileHeight="36.0" prefTileWidth="100.0" prefWidth="100.0" style="-fx-background-color: White;" tileAlignment="TOP_LEFT" AnchorPane.topAnchor="120.0" />
+                     <TilePane fx:id="planningPane" layoutX="178.0" layoutY="120.0" maxWidth="-Infinity" prefColumns="1" prefHeight="650.0" prefRows="72" prefTileHeight="9.0" prefTileWidth="200.0" prefWidth="200.0" style="-fx-background-color: White;" AnchorPane.topAnchor="120.0" />
                      <Label fx:id="showDay" alignment="CENTER" layoutY="5.0" maxHeight="-Infinity" prefHeight="95.0" prefWidth="755.0" style="-fx-background-color: #dba967;" text="Label" textFill="#735937" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="5.0">
                         <font>
                            <Font name="Calibri Bold" size="36.0" />
@@ -42,14 +42,15 @@
                      <TreeTableView fx:id="subtasksTreeTable" layoutX="36.0" layoutY="295.0" prefHeight="442.0" prefWidth="495.0" showRoot="false">
                        <columns>
                            <TreeTableColumn fx:id="subtaskNameColumn" prefWidth="179.0" text="Name" />
-                           <TreeTableColumn fx:id="subtaskDeadlineColumn" minWidth="7.0" prefWidth="85.0" text="Deadline" />
+                           <TreeTableColumn fx:id="subtaskFinalisedColumn" minWidth="7.0" prefWidth="85.0" text="Completed" />
                            <TreeTableColumn fx:id="subtaskProgressColumn" prefWidth="230.0" text="Progress" />
                        </columns>
                      </TreeTableView>
-                      <TableView fx:id="TVTasksTable" layoutX="36.0" layoutY="28.0" onMouseClicked="#handleTaskSelection" prefHeight="230.0" prefWidth="496.0">
+                      <TableView fx:id="tasksTable" layoutX="36.0" layoutY="56.0" onMouseClicked="#handleTaskSelection" prefHeight="230.0" prefWidth="496.0">
                        <columns>
-                           <TableColumn fx:id="TVTaskName" prefWidth="125.0" text="Task" />
-                           <TableColumn prefWidth="148.0" text="Status" />
+                           <TableColumn fx:id="taskNameColumn" prefWidth="135.0" text="Task" />
+                           <TableColumn fx:id="taskDetailsColumn" prefWidth="253.0" text="Details" />
+                           <TableColumn fx:id="taskDeadlineColumn" prefWidth="107.0" text="Deadline" />
                        </columns>
                      </TableView>
                   </children>

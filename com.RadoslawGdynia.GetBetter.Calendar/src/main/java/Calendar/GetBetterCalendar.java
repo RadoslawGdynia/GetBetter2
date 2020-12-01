@@ -1,6 +1,6 @@
-package CalendarWindow;
+package Calendar;
 
-import Datasource.CalendarDatasource;
+import Datasources.CalendarDatasource;
 import Day.Day;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;

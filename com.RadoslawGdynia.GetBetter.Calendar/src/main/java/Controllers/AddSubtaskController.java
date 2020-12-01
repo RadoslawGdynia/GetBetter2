@@ -1,6 +1,6 @@
 package Controllers;
 
-import Datasource.TaskFactory;
+import Datasources.TaskFactory;
 import Task.WorkTask;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -43,6 +43,7 @@ public class AddSubtaskController {
             return;
         }
         TaskFactory.createNewSubtask(selectedWorkTask.getAssignedToDay(),selectedWorkTask, subtaskName, subtaskDetails);
+        GetBetterCalendarController.getInstance().configureSubtasksTable(selectedWorkTask);
         Stage stage = (Stage) cancelButton.getScene().getWindow();
         stage.close();
 
