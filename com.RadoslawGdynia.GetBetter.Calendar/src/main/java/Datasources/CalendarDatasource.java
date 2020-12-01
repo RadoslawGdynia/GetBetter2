@@ -1,4 +1,4 @@
-package Datasource;
+package Datasources;
 
 import Day.Day;
 import org.slf4j.Logger;

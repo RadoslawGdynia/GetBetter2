@@ -1,6 +1,6 @@
 package Task;
 
-import Datasource.TaskDatasource;
+import Datasources.TaskDatasource;
 import Day.Day;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -114,7 +114,7 @@ public class WorkTask extends Task implements Comparable<WorkTask> {
                 }
             }
             this.subtasks.add(added);
-            TaskDatasource.getInstance().addSubtaskToDB(this, added);
+            if(TaskDatasource.getInstance().subtaskNotInDB(this, added.getTaskName())) TaskDatasource.getInstance().addSubtaskToDB(this, added);
 
         } catch (NullPointerException e) {
             log.error("Problem with subtask addition");
@@ -165,7 +165,7 @@ public class WorkTask extends Task implements Comparable<WorkTask> {
 
     /**
      * Following method allows to compare Tasks to one another.
-     * At the beginning only factors taken into account are closeness to deadline, but it will be extended by addition of
+     * At the beginning only factor taken into account is closeness to the deadline, but it will be extended by addition of
      * possibility of stating a status of task, which will describe its importance.
      */
     @Override

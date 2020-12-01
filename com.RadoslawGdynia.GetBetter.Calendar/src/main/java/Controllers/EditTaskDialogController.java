@@ -1,6 +1,6 @@
 package Controllers;
 
-import Datasource.TaskDatasource;
+import Datasources.TaskDatasource;
 import Day.Day;
 import Task.Task;
 import Task.WorkTask;
@@ -71,7 +71,7 @@ public class EditTaskDialogController {
             alert.showAndWait();
             return;
         }
-        TaskDatasource.getInstance().editTaskNAMEandDETAILSInDB(selectedTask, newName, newDetails);
+        TaskDatasource.getInstance().editTaskNameAndDetailsInDB(selectedTask, newName, newDetails);
         selectedTask.editTaskName(newName);
         selectedTask.editTaskDetails(newDetails);
 

@@ -21,17 +21,17 @@ public class TrivialTask extends Task {
     }
 
     @Override
-    public SimpleStringProperty getVisibleTaskName() {
-        return super.getVisibleTaskName();
+    public SimpleStringProperty getObservableTaskName() {
+        return super.getObservableTaskName();
     }
 
     @Override
-    public SimpleStringProperty getVisibleDetails() {
-        return super.getVisibleDetails();
+    public SimpleStringProperty getObservableDetails() {
+        return super.getObservableDetails();
     }
 
     @Override
-    public SimpleBooleanProperty getVisibleFinalised() {
-        return super.getVisibleFinalised();
+    public SimpleBooleanProperty getObservableFinalised() {
+        return super.getObservableFinalised();
     }
 }

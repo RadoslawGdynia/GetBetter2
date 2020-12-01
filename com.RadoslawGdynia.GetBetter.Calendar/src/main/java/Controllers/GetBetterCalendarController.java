@@ -1,14 +1,15 @@
 package Controllers;
 
-import CalendarWindow.GetBetterCalendar;
+import Calendar.GetBetterCalendar;
 import Day.Day;
+import Task.Subtask;
 import Task.Task;
 import Task.WorkTask;
 import Tiles.CalendarTile;
 import Tiles.PlanTile;
 import Tiles.Tile;
 import Tiles.TimeTile;
-import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -57,9 +58,9 @@ public class GetBetterCalendarController {
     @FXML
     private ComboBox<Task> taskSelectionCombo;
     @FXML
-    private Pane TimePane;
+    private Pane timePane;
     @FXML
-    private Pane PlanningPane;
+    private Pane planningPane;
 
     // ============== Today Tasks ==============
 
@@ -68,15 +69,17 @@ public class GetBetterCalendarController {
     @FXML
     private TreeTableColumn<Task, String> subtaskNameColumn;
     @FXML
-    private TreeTableColumn<Task, String> subtaskDeadlineColumn;
-    @FXML
-    private TreeTableColumn<Task, ProgressBar> subtaskProgressColumn;
+    private TreeTableColumn<Task, Boolean> subtaskFinalisedColumn;
 
 
     @FXML
-    private TableView<Task> TVTasksTable;
+    private TableView<Task> tasksTable;
     @FXML
-    private TableColumn<Task, String> TVTaskName;
+    private TableColumn<Task, String> taskNameColumn;
+    @FXML
+    private TableColumn<Task, String> taskDetailsColumn;
+    @FXML
+    private TableColumn<Task, LocalDate> taskDeadlineColumn;
 
     @FXML
     private Button addTaskButton;
@@ -108,7 +111,7 @@ public class GetBetterCalendarController {
     }
 
     public Pane getTimePane() {
-        return TimePane;
+        return timePane;
     }
 
     public Label getShowDay() {
@@ -116,7 +119,7 @@ public class GetBetterCalendarController {
     }
 
     public Pane getPlanningPane() {
-        return PlanningPane;
+        return planningPane;
     }
 
     public TabPane getDetailsTabPane() {
@@ -218,7 +221,7 @@ public class GetBetterCalendarController {
             text.append(":");
             text.append(":00");
 
-            Tile timeTile = new Tile(TimePane, i + "", text.toString(), 100, (int) (TimePane.getHeight() / TILES_NUMBER), new TimeTile());
+            Tile timeTile = new Tile(timePane, i + "", text.toString(), 100, (int) (timePane.getHeight() / TILES_NUMBER), new TimeTile());
             hour1++;
             hour2++;
 
@@ -230,149 +233,176 @@ public class GetBetterCalendarController {
     public void configurePlanTiles() {
         final int TILES_NUMBER = 72;
         for (int i = 1; i <= TILES_NUMBER; i++) {
-            Tile planTile = new Tile(PlanningPane, i + "", "Plan", 200, 9, new PlanTile());
+            Tile planTile = new Tile(planningPane, i + "", "Plan", 200, 9, new PlanTile());
         }
 
     }
 
 
-    //============ B. TODAYS TASK METHODS: ================
+    //============ B. TODAY TASK METHODS: ================
 
 
     public void configureTasksTable() {
-        TVTasksTable.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
-        TVTaskName.setCellValueFactory(new PropertyValueFactory<Task, String>("taskName"));
-        TVTasksTable.setItems(selectedDay.getTodayTasks());
+        tasksTable.setItems(selectedDay.getTodayTasks());
+        taskNameColumn.setCellValueFactory(new PropertyValueFactory<>("taskName"));
+        taskDetailsColumn.setCellValueFactory(new PropertyValueFactory<>("details"));
+        //taskDeadlineColumn.setCellValueFactory(new PropertyValueFactory<>("deadline"));
+
+        taskNameColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Task, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<Task, String> taskStringCellDataFeatures) {
+                return taskStringCellDataFeatures.getValue().getObservableTaskName();
+            }
+        });
+        taskDetailsColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Task, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<Task, String> taskStringCellDataFeatures) {
+                return taskStringCellDataFeatures.getValue().getObservableDetails();
+            }
+        });
+        tasksTable.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Task>() {
+            @Override
+            public void changed(ObservableValue<? extends Task> observableValue, Task task, Task t1) {
+                if (t1 != null) {
+                    Task observedTask = tasksTable.getSelectionModel().getSelectedItem();
+                    if (t1.getClass().getSimpleName().equals("WorkTask"))
+
+                        configureSubtasksTable((WorkTask) observedTask);
+                }
+            }
+        });
+
+        tasksTable.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+
     }
 
     public void handleTaskSelection(MouseEvent mouseEvent) {
-        Task cTask = TVTasksTable.getSelectionModel().getSelectedItem();
-        if(cTask==null){
+        Task cTask = tasksTable.getSelectionModel().getSelectedItem();
+        if (cTask == null) {
             return;
         }
         log.info("Currently selected task: " + cTask.getTaskName());
+        subtasksTreeTable.setDisable(false);
         addTaskButton.setDisable(false);
         editTaskButton.setDisable(false);
         deleteTaskButton.setDisable(false);
-        if(cTask.getClass().getSimpleName().equals("TrivialTask")){
+        if (cTask.getClass().getSimpleName().equals("TrivialTask")) {
             addTaskButton.setDisable(true);
+            subtasksTreeTable.setDisable(true);
         }
-        subtasksTreeTable.setDisable(false);
+
     }
 
 
-    public void configureSubtasksTable() {
+    public void configureSubtasksTable(WorkTask task) {
+        subtasksTreeTable.refresh();
         TreeItem<Task> root = new TreeItem<>();
-
-        subtaskNameColumn.setCellValueFactory((Callback<TreeTableColumn.CellDataFeatures<Task, String>, ObservableValue<String>>)
-                taskStringCellDataFeatures -> new SimpleStringProperty(taskStringCellDataFeatures.getValue().getValue().getTaskName()));
-
-//        subtaskDeadlineColumn.setCellValueFactory(taskStringCellDataFeatures -> {
-//            if (taskStringCellDataFeatures == null) {
-//                return null;
-//            } else {
-//                return new SimpleStringProperty(taskStringCellDataFeatures.getValue().getValue().getDeadline().toString());
-//            }
-//        });
-//
-//        for(Task task : selectedDay.getTodayTasks()) {
-//           TreeItem<Task> listableTask = new TreeItem<>(task);
-//
-//            for (Task subtask : task.getSubtasks()) {
-//                TreeItem<Task> listableSubtask = new TreeItem<>(subtask);
-//                listableTask.getChildren().add(listableSubtask);
-//            }
-//            root.getChildren().add(listableTask);
-//        }
-//        subtasksTreeTable.setRoot(root);
+        root.setValue(task);
+        for (Subtask subtask : task.getSubtasks()) {
+            TreeItem<Task> listableSubtask = new TreeItem<>(subtask);
+            root.getChildren().add(listableSubtask);
+        }
+        subtasksTreeTable.setRoot(root);
+        subtaskNameColumn.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Task, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<Task, String> parameter) {
+                return parameter.getValue().getValue().getObservableTaskName();
+            }
+        });
 
 
+        subtaskFinalisedColumn.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Task, Boolean>, ObservableValue<Boolean>>() {
+            @Override
+            public ObservableValue<Boolean> call(TreeTableColumn.CellDataFeatures<Task, Boolean> parameter) {
+                return parameter.getValue().getValue().getObservableFinalised();
+            }
+        });
     }
 
-    public void handleAddTaskClick() {
-        Dialog<ButtonType> dialog = new Dialog<>();
-        dialog.setTitle("Addition of task to the day: " + selectedDay.getDate());
+        public void handleAddTaskClick () {
+            Dialog<ButtonType> dialog = new Dialog<>();
+            dialog.setTitle("Addition of task to the day: " + selectedDay.getDate());
 
 
-        try {
-            URL url = new File("com.RadoslawGdynia.GetBetter.Calendar/src/main/resources/AddTaskDialog.fxml").toURI().toURL();
-            dialog.getDialogPane().setContent(FXMLLoader.load(url));
-            dialog.showAndWait();
+            try {
+                URL url = new File("com.RadoslawGdynia.GetBetter.Calendar/src/main/resources/AddTaskDialog.fxml").toURI().toURL();
+                dialog.getDialogPane().setContent(FXMLLoader.load(url));
+                dialog.showAndWait();
 
-        } catch (NullPointerException e){
+            } catch (NullPointerException e) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Lack of information");
                 alert.setHeaderText("You are trying to create task without necessary information.");
                 alert.setContentText("Task name is required.");
 
-        } catch(IOException e) {
-            log.error("Could not load the dialog");
-            e.printStackTrace();
-        }
-
-    }
-
-    public void handleAddSubtaskClick(ActionEvent event) {
-        Task task = TVTasksTable.getSelectionModel().getSelectedItem();
-        if (task == null) {
-            noTaskSelected();
-        } else {
-            WorkTask wt = (WorkTask) task;
-            Controllers.AddSubtaskController.setSelectedWorkTask(wt);
-            Dialog<ButtonType> dialog = new Dialog<>();
-            dialog.setTitle("Addition of subtask to task: " + task.getTaskName());
-            try {
-                URL url = new File("com.RadoslawGdynia.GetBetter.Calendar/src/main/resources/AddSubtaskDialog.fxml").toURI().toURL();
-                dialog.getDialogPane().setContent(FXMLLoader.load(url));
-                dialog.showAndWait();
-
             } catch (IOException e) {
                 log.error("Could not load the dialog");
                 e.printStackTrace();
             }
+
         }
-    }
 
-    public void handleEditTaskClick() {
-        Task task = TVTasksTable.getSelectionModel().getSelectedItem();
-        if(task == null){
-            noTaskSelected();
-        } else {
-            Controllers.EditTaskDialogController.setSelectedTask(task);
-            Dialog<ButtonType> dialog = new Dialog<>();
-            dialog.setTitle("Editing task: " + task.getTaskName());
+        public void handleAddSubtaskClick (ActionEvent event){
+            Task task = tasksTable.getSelectionModel().getSelectedItem();
+            if (task == null) {
+                noTaskSelected();
+            } else {
+                WorkTask wt = (WorkTask) task;
+                Controllers.AddSubtaskController.setSelectedWorkTask(wt);
+                Dialog<ButtonType> dialog = new Dialog<>();
+                dialog.setTitle("Addition of subtask to task: " + task.getTaskName());
+                try {
+                    URL url = new File("com.RadoslawGdynia.GetBetter.Calendar/src/main/resources/AddSubtaskDialog.fxml").toURI().toURL();
+                    dialog.getDialogPane().setContent(FXMLLoader.load(url));
+                    dialog.showAndWait();
 
-
-            try {
-                URL url = new File("com.RadoslawGdynia.GetBetter.Calendar/src/main/resources/EditTaskDialog.fxml").toURI().toURL();
-                dialog.getDialogPane().setContent(FXMLLoader.load(url));
-                dialog.showAndWait();
-            } catch (IOException e) {
-                log.error("Could not load the dialog");
-                e.printStackTrace();
+                } catch (IOException e) {
+                    log.error("Could not load the dialog");
+                    e.printStackTrace();
+                }
             }
         }
-    }
 
-    public void handleDeleteTaskClick(ActionEvent event) {
+        public void handleEditTaskClick () {
+            Task task = tasksTable.getSelectionModel().getSelectedItem();
+            if (task == null) {
+                noTaskSelected();
+            } else {
+                Controllers.EditTaskDialogController.setSelectedTask(task);
+                Dialog<ButtonType> dialog = new Dialog<>();
+                dialog.setTitle("Editing task: " + task.getTaskName());
 
-        Task task = TVTasksTable.getSelectionModel().getSelectedItem();
-        deleteTask(task);
-    }
 
-    public void deleteTask(Task t) {
-        Alert a = new Alert(Alert.AlertType.CONFIRMATION);
-        a.setTitle("Task deletion");
-        a.setHeaderText("You intend to delete task: " + t.getTaskName());
-        a.setContentText("Are you sure you want to proceed? This operation is irreversible and you have put this task in the calendar for a good reason");
-        Optional<ButtonType> result = a.showAndWait();
-
-        if (result.isPresent() && result.get() == ButtonType.OK) {
-            selectedDay.removeTask(t);
+                try {
+                    URL url = new File("com.RadoslawGdynia.GetBetter.Calendar/src/main/resources/EditTaskDialog.fxml").toURI().toURL();
+                    dialog.getDialogPane().setContent(FXMLLoader.load(url));
+                    dialog.showAndWait();
+                } catch (IOException e) {
+                    log.error("Could not load the dialog");
+                    e.printStackTrace();
+                }
+            }
         }
+
+        public void handleDeleteTaskClick (ActionEvent event){
+
+            Task task = tasksTable.getSelectionModel().getSelectedItem();
+            deleteTask(task);
+        }
+
+        public void deleteTask (Task t){
+            Alert a = new Alert(Alert.AlertType.CONFIRMATION);
+            a.setTitle("Task deletion");
+            a.setHeaderText("You intend to delete task: " + t.getTaskName());
+            a.setContentText("Are you sure you want to proceed? This operation is irreversible and you have put this task in the calendar for a good reason");
+            Optional<ButtonType> result = a.showAndWait();
+
+            if (result.isPresent() && result.get() == ButtonType.OK) {
+                selectedDay.removeTask(t);
+            }
+        }
+
+
     }
-
-
-}
 
 

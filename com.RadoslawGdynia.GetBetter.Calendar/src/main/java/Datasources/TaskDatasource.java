@@ -1,4 +1,4 @@
-package Datasource;
+package Datasources;
 
 import Day.Day;
 import Task.*;
@@ -168,9 +168,12 @@ public class TaskDatasource {
     public void deleteTaskFromDB(Task task) {
         int dayID = task.getAssignedToDay().getDayID();
         String TASK_DELETE = "DELETE FROM \"" + TABLE_TASKS + "\" WHERE DayID=\"" + dayID + "\" AND Tasks.Name=\"" + task.getTaskName() + "\"";
+        String SUBTASKS_DELETE = "DELETE FROM \"" + TABLE_SUBTASKS + "\" WHERE \"" + COLUMN_SUBTASKS_PARENT + "\"=\"" + task.getTaskName()+"\"";
         try (Statement statement = conn.createStatement()) {
             statement.execute(TASK_DELETE);
-
+            if(task.getClass().getSimpleName().equals("WorkTask")){
+                statement.execute(SUBTASKS_DELETE);
+            }
         } catch (SQLException e) {
             log.error("Error took place while canceling task " + task.getTaskName() + " from DB");
         }
@@ -240,13 +243,33 @@ public class TaskDatasource {
         }
         return validation==null;
     }
-    public void editTaskNAMEandDETAILSInDB(Task task, String name, String details) {
+    public boolean subtaskNotInDB(WorkTask parent, String taskName){
+        String QUERY_SUBTASK = "SELECT * FROM " + TABLE_SUBTASKS + " WHERE \"" + COLUMN_SUBTASKS_PARENT +"\"=\"" + parent.getTaskName() + "\" AND \"" + COLUMN_SUBTASKS_NAME +"\"=\"" + taskName+"\"";
+        String validation = null;
+        try(Statement statement = conn.createStatement()) {
+            statement.execute(QUERY_SUBTASK);
+            ResultSet results = statement.getResultSet();
+            validation = results.getString(COLUMN_TASKS_NAME);
+
+
+        }catch (SQLException e) {
+            return validation==null;
+        }
+        return validation==null;
+    }
+    public void editTaskNameAndDetailsInDB(Task task, String name, String details) {
         int dayID = task.getAssignedToDay().getDayID();
         String NAME_UPDATE = "UPDATE " + TABLE_TASKS + " SET " + COLUMN_TASKS_NAME + "=\"" + name + "\", " + COLUMN_TASKS_DETAILS + "=\"" + details +
-                "\" WHERE DayID=\"" + dayID + "\" AND Tasks.Name=\"" + task.getTaskName() + "\"";
+                "\" WHERE DayID=\"" + dayID + "\" AND \"" + COLUMN_TASKS_NAME + "\"=\"" + task.getTaskName() + "\"";
+        String NAME_UPDATE_IN_SUBTASKS = "UPDATE " + TABLE_SUBTASKS + " SET " + COLUMN_SUBTASKS_PARENT + "=\"" + name + "\" WHERE \"" +
+                COLUMN_SUBTASKS_PARENT + "\"=\"" + task.getTaskName() + "\"";
 
         try (Statement statement = conn.createStatement()) {
             statement.execute(NAME_UPDATE);
+            if(task.getClass().getSimpleName().equals("WorkTask")){
+                statement.execute(NAME_UPDATE_IN_SUBTASKS);
+            }
+
 
         } catch (SQLException e) {
             log.error("Error took place while editing name and details of task: " + task.getTaskName() + "\n Message: " + e.getMessage());
