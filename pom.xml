@@ -8,10 +8,10 @@
     <artifactId>com.RadoslawGdynia.GetBetter</artifactId>
     <version>1.0-SNAPSHOT</version>
     <modules>
-        <module>com.RadoslawGdynia.GetBetter.Calendar</module>
-        <module>com.RadoslawGdynia.GetBetter.Diary</module>
-        <module>com.RadoslawGdynia.GetBetter.Finance</module>
-        <module>com.RadoslawGdynia.GetBetter.MainWindow</module>
+        <module>Calendar</module>
+        <module>Diary</module>
+        <module>Finance</module>
+        <module>MainWindow</module>
     </modules>
 
     <properties>

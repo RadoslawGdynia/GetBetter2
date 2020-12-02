@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ColorPicker?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TreeTableColumn?>
+<?import javafx.scene.control.TreeTableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.TilePane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane fx:id="mainPane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1700.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.GetBetterCalendarController">
+   <TabPane fx:id="detailsTabPane" layoutX="601.0" layoutY="-2.0" prefHeight="800.0" prefWidth="755.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="945.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+     <tabs>
+         <Tab closable="false" text="Day Plan">
+            <content>
+               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-background-color: #dbb98c;">
+                  <children>
+                     <TilePane fx:id="timePane" layoutX="78.0" layoutY="120.0" prefColumns="1" prefHeight="650.0" prefRows="72" prefTileHeight="36.0" prefTileWidth="100.0" prefWidth="100.0" style="-fx-background-color: White;" tileAlignment="TOP_LEFT" AnchorPane.topAnchor="120.0" />
+                     <TilePane fx:id="planningPane" layoutX="178.0" layoutY="120.0" maxWidth="-Infinity" prefColumns="1" prefHeight="650.0" prefRows="72" prefTileHeight="9.0" prefTileWidth="200.0" prefWidth="200.0" style="-fx-background-color: White;" AnchorPane.topAnchor="120.0" />
+                     <Label fx:id="showDay" alignment="CENTER" layoutY="5.0" maxHeight="-Infinity" prefHeight="95.0" prefWidth="755.0" style="-fx-background-color: #dba967;" text="Label" textFill="#735937" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="5.0">
+                        <font>
+                           <Font name="Calibri Bold" size="36.0" />
+                        </font></Label>
+                     <Separator layoutX="146.0" layoutY="99.0" prefHeight="4.0" prefWidth="314.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
+                     <VBox layoutX="529.0" layoutY="103.0" prefHeight="663.0" prefWidth="221.0" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="108.0">
+                        <children>
+                           <ComboBox fx:id="taskSelectionCombo" prefHeight="50.0" prefWidth="215.0">
+                              <VBox.margin>
+                                 <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                              </VBox.margin>
+                           </ComboBox>
+                           <ColorPicker prefHeight="50.0" prefWidth="220.0">
+                              <VBox.margin>
+                                 <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                              </VBox.margin>
+                           </ColorPicker>
+                           <Button mnemonicParsing="false" onAction="#handleAssignTaskButton" prefHeight="50.0" prefWidth="210.0" text="Assign Task">
+                              <VBox.margin>
+                                 <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                              </VBox.margin>
+                           </Button>
+                           <Button mnemonicParsing="false" onAction="#handleClearTileButton" prefHeight="50.0" prefWidth="226.0" text="Clear Tile">
+                              <VBox.margin>
+                                 <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                              </VBox.margin>
+                           </Button>
+                        </children>
+                     </VBox>
+                  </children>
+               </AnchorPane>
+            </content>
+         </Tab>
+       <Tab closable="false" text="Todays Tasks">
+         <content>
+           <AnchorPane disable="true" minHeight="0.0" minWidth="0.0" prefHeight="605.0" prefWidth="600.0" style="-fx-background-color: BLANCHEDALMOND;">
+                  <children>
+                     <Button fx:id="addTaskButton" layoutX="554.0" layoutY="49.0" mnemonicParsing="false" onAction="#handleAddTaskClick" prefHeight="26.0" prefWidth="118.0" text="New Task" />
+                     <Button fx:id="editTaskButton" disable="true" layoutX="553.0" layoutY="145.0" mnemonicParsing="false" onAction="#handleEditTaskClick" prefHeight="26.0" prefWidth="121.0" text="Edit Task" />
+                     <Button fx:id="deleteTaskButton" disable="true" layoutX="552.0" layoutY="193.0" mnemonicParsing="false" onAction="#handleDeleteTaskClick" prefHeight="25.0" prefWidth="123.0" text="Delete Task" />
+                      <Button fx:id="addTaskButton" disable="true" layoutX="553.0" layoutY="97.0" mnemonicParsing="false" onAction="#handleAddSubtaskClick" prefHeight="26.0" prefWidth="120.0" text="Add Subtask" />
+                     <TreeTableView fx:id="subtasksTreeTable" layoutX="36.0" layoutY="295.0" prefHeight="442.0" prefWidth="495.0" showRoot="false">
+                       <columns>
+                           <TreeTableColumn fx:id="subtaskNameColumn" prefWidth="179.0" text="Name" />
+                           <TreeTableColumn fx:id="subtaskFinalisedColumn" minWidth="7.0" prefWidth="85.0" text="Completed" />
+                           <TreeTableColumn fx:id="subtaskProgressColumn" prefWidth="230.0" text="Progress" />
+                       </columns>
+                     </TreeTableView>
+                      <TableView fx:id="tasksTable" layoutX="36.0" layoutY="56.0" onMouseClicked="#handleTaskSelection" prefHeight="230.0" prefWidth="496.0">
+                       <columns>
+                           <TableColumn fx:id="taskNameColumn" prefWidth="135.0" text="Task" />
+                           <TableColumn fx:id="taskDetailsColumn" prefWidth="253.0" text="Details" />
+                           <TableColumn fx:id="taskDeadlineColumn" prefWidth="107.0" text="Deadline" />
+                       </columns>
+                     </TableView>
+                  </children>
+               </AnchorPane>
+         </content>
+       </Tab>
+     </tabs>
+   </TabPane>
+   <Label fx:id="monthName" alignment="CENTER" layoutX="404.0" layoutY="27.0" prefHeight="32.0" prefWidth="240.0" text="Month">
+      <font>
+         <Font name="Calibri Bold" size="36.0" />
+      </font>
+   </Label>
+   <Button layoutX="874.0" layoutY="55.0" mnemonicParsing="false" onAction="#handleMonthForward" text="-&gt;" />
+   <Button alignment="CENTER" layoutX="144.0" layoutY="55.0" mnemonicParsing="false" onAction="#handleMonthBack" text="&lt;-" />
+   <Label fx:id="yearNumber" alignment="CENTER" layoutX="494.0" layoutY="80.0" prefHeight="17.0" prefWidth="61.0" text="Year">
+      <font>
+         <Font name="Calibri Bold" size="22.0" />
+      </font>
+   </Label>
+   <TilePane fx:id="daysTilePane" layoutX="174.0" layoutY="135.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefColumns="8" prefHeight="600.0" prefRows="6" prefTileHeight="100.0" prefTileWidth="100.0" prefWidth="700.0" style="-fx-background-color: BLANCHEDALMOND;">
+      <opaqueInsets>
+         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+      </opaqueInsets></TilePane>
+   <Separator layoutX="942.0" layoutY="14.0" orientation="VERTICAL" prefHeight="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="0.0" />
+</AnchorPane>
