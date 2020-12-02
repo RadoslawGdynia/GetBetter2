@@ -1,7 +1,6 @@
 package Main;
 
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
@@ -20,8 +19,6 @@ public class Controller implements Initializable {
 
     public static final Logger log = LoggerFactory.getLogger(Controller.class);
 
-
-
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
@@ -39,11 +36,9 @@ public class Controller implements Initializable {
             calendarStage.show();
         }
         catch (Exception e) {
-            System.out.println("MESSAGE OF ERROR: " + e.getMessage());
+            log.error("MESSAGE OF ERROR: " + e.getMessage());
             e.printStackTrace();
         }
-
-
     }
     public void handleDiaryButtonClick() {
         try {
@@ -54,7 +49,8 @@ public class Controller implements Initializable {
             diaryStage.setTitle("Diary");
             diaryStage.show();
         }
-        catch (IOException e) {
+        catch (Exception e) {
+            log.error("Error while opening Diary window. Message: " + e.getMessage());
             e.printStackTrace();
         }
     }
@@ -64,6 +60,6 @@ public class Controller implements Initializable {
     }
 
 
-    public void handleTaskStatisticsButtonClick(ActionEvent event) {
+    public void handleTaskStatisticsButtonClick() {
     }
 }

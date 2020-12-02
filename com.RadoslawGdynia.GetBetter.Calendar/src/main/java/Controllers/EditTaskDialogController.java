@@ -92,4 +92,5 @@ public class EditTaskDialogController {
          Stage stage = (Stage) cancelButton.getScene().getWindow();
          stage.close();
      }
+
 }

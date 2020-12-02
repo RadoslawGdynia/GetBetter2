@@ -13,15 +13,6 @@ public class WorkDay extends Day {
     public WorkDay(LocalDate date) {
         super(date);
     }
-
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(super.toString());
-
-        return sb.toString();
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

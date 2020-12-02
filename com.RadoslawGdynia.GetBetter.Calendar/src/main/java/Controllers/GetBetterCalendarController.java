@@ -2,23 +2,15 @@ package Controllers;
 
 import Calendar.GetBetterCalendar;
 import Day.Day;
+import Factories.TileFactory;
 import Task.Subtask;
 import Task.Task;
 import Task.WorkTask;
-import Tiles.CalendarTile;
-import Tiles.PlanTile;
-import Tiles.Tile;
-import Tiles.TimeTile;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
-import javafx.util.Callback;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -143,30 +135,8 @@ public class GetBetterCalendarController {
 
         monthName.setText(LocalDate.of(currentYearNum, currentMonthNum, currentDayNum).getMonth().getDisplayName(TextStyle.FULL, Locale.ENGLISH));
         yearNumber.setText(String.valueOf(currentYearNum));
-
-        int firstDayOfMonth = LocalDate.of(currentYearNum, currentMonthNum, currentDayNum - (currentDayNum - 1)).getDayOfWeek().getValue();
-        int numberOfDaysInCurrentMonth = LocalDate.of(currentYearNum, currentMonthNum, currentDayNum).getMonth().maxLength();
-
         int NUM_OF_TILES = 42;
-        int size = 90;
-
-        for (int i = 1; i <= NUM_OF_TILES; i++) {
-
-            String idString = "CalendarTile" + i;
-            Tile calendarTile;
-            int dayNumber = (i - (firstDayOfMonth - 1));
-            String display = dayNumber + "";
-            if ((i >= firstDayOfMonth) && (i < (numberOfDaysInCurrentMonth + firstDayOfMonth))) {
-
-                calendarTile = new Tile(daysTilePane, idString, display, size, size, new CalendarTile(dayNumber));
-
-            } else {
-                calendarTile = new Tile(daysTilePane, idString, display, size, size, new CalendarTile(1));
-                calendarTile.setDisable(true);
-                calendarTile.setVisible(false);
-            }
-
-        }
+        TileFactory.createSetOfTiles("CalendarTile", daysTilePane, NUM_OF_TILES);
     }
 
     public void handleMonthBack() {
@@ -209,38 +179,20 @@ public class GetBetterCalendarController {
     //============== A. DAY PLAN METHODS: ==============
     public void configureTimeTiles() {
         final int TILES_NUMBER = 18;
-        int hour1 = 6;
-        int hour2 = 7;
-        StringBuilder text = new StringBuilder();
-
-        for (int i = 1; i <= TILES_NUMBER; i++) {
-            text.append(hour1);
-            text.append(":00");
-            text.append("-");
-            text.append(hour2);
-            text.append(":");
-            text.append(":00");
-
-            Tile timeTile = new Tile(timePane, i + "", text.toString(), 100, (int) (timePane.getHeight() / TILES_NUMBER), new TimeTile());
-            hour1++;
-            hour2++;
-
-            text.delete(0, text.length());
-        }
+        TileFactory.createSetOfTiles("TimeTile", timePane, TILES_NUMBER);
 
     }
 
     public void configurePlanTiles() {
         final int TILES_NUMBER = 72;
-        for (int i = 1; i <= TILES_NUMBER; i++) {
-            Tile planTile = new Tile(planningPane, i + "", "Plan", 200, 9, new PlanTile());
-        }
-
+        TileFactory.createSetOfTiles("PlanTile", planningPane, TILES_NUMBER);
+    }
+    public void populateComboBox() {
+        taskSelectionCombo.setItems(selectedDay.getTodayTasks());
     }
 
 
     //============ B. TODAY TASK METHODS: ================
-
 
     public void configureTasksTable() {
         tasksTable.setItems(selectedDay.getTodayTasks());
@@ -248,27 +200,15 @@ public class GetBetterCalendarController {
         taskDetailsColumn.setCellValueFactory(new PropertyValueFactory<>("details"));
         //taskDeadlineColumn.setCellValueFactory(new PropertyValueFactory<>("deadline"));
 
-        taskNameColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Task, String>, ObservableValue<String>>() {
-            @Override
-            public ObservableValue<String> call(TableColumn.CellDataFeatures<Task, String> taskStringCellDataFeatures) {
-                return taskStringCellDataFeatures.getValue().getObservableTaskName();
-            }
-        });
-        taskDetailsColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Task, String>, ObservableValue<String>>() {
-            @Override
-            public ObservableValue<String> call(TableColumn.CellDataFeatures<Task, String> taskStringCellDataFeatures) {
-                return taskStringCellDataFeatures.getValue().getObservableDetails();
-            }
-        });
-        tasksTable.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Task>() {
-            @Override
-            public void changed(ObservableValue<? extends Task> observableValue, Task task, Task t1) {
-                if (t1 != null) {
-                    Task observedTask = tasksTable.getSelectionModel().getSelectedItem();
-                    if (t1.getClass().getSimpleName().equals("WorkTask"))
+        taskNameColumn.setCellValueFactory(taskStringCellDataFeatures -> taskStringCellDataFeatures.getValue().getObservableTaskName());
+        taskDetailsColumn.setCellValueFactory(taskStringCellDataFeatures -> taskStringCellDataFeatures.getValue().getObservableDetails());
 
-                        configureSubtasksTable((WorkTask) observedTask);
-                }
+        tasksTable.getSelectionModel().selectedItemProperty().addListener((observableValue, task, t1) -> {
+            if (t1 != null) {
+                Task observedTask = tasksTable.getSelectionModel().getSelectedItem();
+                if (t1.getClass().getSimpleName().equals("WorkTask"))
+
+                    configureSubtasksTable((WorkTask) observedTask);
             }
         });
 
@@ -276,7 +216,7 @@ public class GetBetterCalendarController {
 
     }
 
-    public void handleTaskSelection(MouseEvent mouseEvent) {
+    public void handleTaskSelection() {
         Task cTask = tasksTable.getSelectionModel().getSelectedItem();
         if (cTask == null) {
             return;
@@ -303,20 +243,10 @@ public class GetBetterCalendarController {
             root.getChildren().add(listableSubtask);
         }
         subtasksTreeTable.setRoot(root);
-        subtaskNameColumn.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Task, String>, ObservableValue<String>>() {
-            @Override
-            public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<Task, String> parameter) {
-                return parameter.getValue().getValue().getObservableTaskName();
-            }
-        });
+        subtaskNameColumn.setCellValueFactory(parameter -> parameter.getValue().getValue().getObservableTaskName());
 
 
-        subtaskFinalisedColumn.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Task, Boolean>, ObservableValue<Boolean>>() {
-            @Override
-            public ObservableValue<Boolean> call(TreeTableColumn.CellDataFeatures<Task, Boolean> parameter) {
-                return parameter.getValue().getValue().getObservableFinalised();
-            }
-        });
+        subtaskFinalisedColumn.setCellValueFactory(parameter -> parameter.getValue().getValue().getObservableFinalised());
     }
 
         public void handleAddTaskClick () {
@@ -342,7 +272,7 @@ public class GetBetterCalendarController {
 
         }
 
-        public void handleAddSubtaskClick (ActionEvent event){
+        public void handleAddSubtaskClick (){
             Task task = tasksTable.getSelectionModel().getSelectedItem();
             if (task == null) {
                 noTaskSelected();
@@ -384,8 +314,7 @@ public class GetBetterCalendarController {
             }
         }
 
-        public void handleDeleteTaskClick (ActionEvent event){
-
+        public void handleDeleteTaskClick (){
             Task task = tasksTable.getSelectionModel().getSelectedItem();
             deleteTask(task);
         }

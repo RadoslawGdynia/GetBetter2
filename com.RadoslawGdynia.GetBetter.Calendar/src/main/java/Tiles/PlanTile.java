@@ -9,6 +9,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class PlanTile implements ITileModifier {
+    private Color color = Color.PLUM;
+    private boolean selected = false;
 
     public static final Logger log = LoggerFactory.getLogger(PlanTile.class);
 
@@ -18,7 +20,7 @@ public class PlanTile implements ITileModifier {
     @Override
     public Rectangle modifyLayout(int xPixels, int yPixels) {
         Rectangle border = new Rectangle(xPixels, yPixels);
-        border.setFill(Color.GHOSTWHITE);
+        border.setFill(color);
         border.setStroke(Color.BLACK);
         return border;
     }
@@ -30,8 +32,20 @@ public class PlanTile implements ITileModifier {
         text.setTextAlignment(TextAlignment.CENTER);
         return text;
     }
+    public void setColor(String color){
+        this.color = Color.valueOf(color);
+    }
+    public void setTileText(String text){
+
+    }
 
     @Override
     public void handleClick() {
+        this.selected = !selected;
+        if(this.selected) {
+            PlanTilesManager.getInstance().addTileToList(this);
+        } else {
+            PlanTilesManager.getInstance().removeTileFromList(this);
+        }
     }
 }

@@ -17,8 +17,6 @@ public class CalendarDatasource {
     private Connection conn;
     private static final CalendarDatasource instance = new CalendarDatasource();
 
-    public final String CREATE_DAYTABLE_STRING = "CREATE TABLE IF NOT EXISTS CalendarDays (_id INTEGER, Day INTEGER, Month INTEGER, Year INTEGER, Tasks INTEGER)";
-
     public final String TABLE_DAYS = "CalendarDays";
     public final String COLUMN_DAYS_ID = "_id";
     public final String COLUMN_DAYS_DATE = "Date";

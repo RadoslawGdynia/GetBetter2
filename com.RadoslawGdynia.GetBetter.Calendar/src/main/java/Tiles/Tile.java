@@ -11,12 +11,9 @@ public class Tile extends StackPane  {
 
     public static final Logger log = LoggerFactory.getLogger(Tile.class);
     private final Pane root;
-    private final String ID;
+    private final int ID;
 
-
-
-
-    public Tile(Pane tPane, String id, String display, int xPixels, int yPixels, ITileModifier modifier) {
+    public Tile(Pane tPane, int id, String display, int xPixels, int yPixels, ITileModifier modifier) {
 
         this.ID = id;
         this.root = tPane;
