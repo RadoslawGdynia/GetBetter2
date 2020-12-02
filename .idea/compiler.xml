@@ -6,10 +6,10 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="com.RadoslawGdynia.GetBetter.Diary" />
-        <module name="com.RadoslawGdynia.GetBetter.Calendar" />
-        <module name="com.RadoslawGdynia.GetBetter.MainWindow" />
-        <module name="com.RadoslawGdynia.GetBetter.Finance" />
+        <module name="Diary" />
+        <module name="Finance" />
+        <module name="Calendar" />
+        <module name="MainWindow" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel target="14" />
