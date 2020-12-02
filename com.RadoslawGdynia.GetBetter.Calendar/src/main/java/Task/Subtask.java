@@ -5,7 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class Subtask extends Task {
-    private WorkTask assignedTo;
+    private final WorkTask assignedTo;
     public static final Logger log = LoggerFactory.getLogger(Subtask.class);
 
     public Subtask(Day day, String name, String details, WorkTask assignedTo) {
@@ -16,10 +16,5 @@ public class Subtask extends Task {
         this.assignedTo = assignedTo;
         this.setPointValue(0);
         assignedTo.addSubtask(this);
-    }
-
-
-    public WorkTask getAssignedTo() {
-        return assignedTo;
     }
 }

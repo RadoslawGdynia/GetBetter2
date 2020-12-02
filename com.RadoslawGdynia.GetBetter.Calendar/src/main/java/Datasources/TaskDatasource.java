@@ -1,6 +1,7 @@
 package Datasources;
 
 import Day.Day;
+import Factories.TaskFactory;
 import Task.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -269,6 +270,7 @@ public class TaskDatasource {
             if(task.getClass().getSimpleName().equals("WorkTask")){
                 statement.execute(NAME_UPDATE_IN_SUBTASKS);
             }
+            PlanTilesDatasource.getInstance().updateTaskNameForTiles(task.getAssignedToDay(), task.getTaskName(), name);
 
 
         } catch (SQLException e) {

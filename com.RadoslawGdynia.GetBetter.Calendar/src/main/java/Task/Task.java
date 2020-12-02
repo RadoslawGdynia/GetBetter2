@@ -12,9 +12,9 @@ public abstract class Task {
 
     public static final Logger log = LoggerFactory.getLogger(Task.class);
     private Day assignedToDay;
-    private SimpleStringProperty taskName = new SimpleStringProperty("");
-    private SimpleStringProperty details = new SimpleStringProperty("");
-    private SimpleBooleanProperty finalised = new SimpleBooleanProperty();
+    private final SimpleStringProperty taskName = new SimpleStringProperty("");
+    private final SimpleStringProperty details = new SimpleStringProperty("");
+    private final SimpleBooleanProperty finalised = new SimpleBooleanProperty();
 
     private int pointValue;
 
@@ -97,7 +97,7 @@ public abstract class Task {
             assignedToDay = day;
         }
         else {
-            System.out.println("Tasks cannot be moved to the past");
+            log.info("Tasks cannot be moved to the past");
         }
     }
 
@@ -108,19 +108,6 @@ public abstract class Task {
 
     @Override
     public String toString() {
-        StringBuilder textTask = new StringBuilder();
-
-        textTask.append(this.getClass().getName());
-        textTask.append(";");
-        textTask.append(assignedToDay.toString().trim());
-        textTask.append(";");
-        textTask.append(taskName.getValue());
-        textTask.append(";");
-        textTask.append(details.getValue());
-        textTask.append(";");
-        textTask.append(finalised.getValue());
-        textTask.append(";");
-
-        return textTask.toString();
+        return this.getTaskName();
     }
 }

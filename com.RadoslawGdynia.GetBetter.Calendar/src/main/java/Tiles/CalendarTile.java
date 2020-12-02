@@ -68,6 +68,7 @@ public class CalendarTile implements ITileModifier {
         GetBetterCalendarController.getInstance().configureTasksTable();
         GetBetterCalendarController.getInstance().configureTimeTiles();
         GetBetterCalendarController.getInstance().configurePlanTiles();
+        GetBetterCalendarController.getInstance().populateComboBox();
 
 
     }

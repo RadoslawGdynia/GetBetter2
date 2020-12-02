@@ -16,8 +16,8 @@ public class Day {
 
     public static final Logger log = LoggerFactory.getLogger(Day.class);
     private final LocalDate date;
-    private ObservableList<Task> todayTasks;
-    private int dayID;
+    private final ObservableList<Task> todayTasks;
+    private final int dayID;
     private static int GlobalID = 1;
     private int taskNumber;
 
@@ -119,11 +119,8 @@ public class Day {
     @Override
     public String toString() {
 
-        StringBuilder sb = new StringBuilder();
-        sb.append(this.date);
-        sb.append(" number of tasks: ");
-        sb.append(this.taskNumber);
-
-        return sb.toString();
+        return this.date +
+                " number of tasks: " +
+                this.taskNumber;
     }
 }
