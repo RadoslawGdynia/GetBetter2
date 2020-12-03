@@ -1,9 +1,9 @@
-module com.RadoslawGdynia.GetBetter.MainWindow {
+module MainWindow {
     requires javafx.fxml;
     requires javafx.controls;
     requires java.sql;
     requires Calendar;
     requires slf4j.api;
 
-    opens Main;
+    opens pl.RadoslawGdynia.Main.Main;
 }

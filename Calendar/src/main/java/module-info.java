@@ -2,16 +2,13 @@ open module Calendar {
 
     requires javafx.controls;
     requires javafx.fxml;
+    requires javafx.graphics;
     requires java.sql;
     requires slf4j.api;
 
-    exports Calendar;
-    exports Datasources;
-    exports Day;
-    exports Controllers;
-    exports Task;
-    exports Tiles;
 
+    exports pl.RadoslawGdynia.Calendar.Calendar;
+    exports pl.RadoslawGdynia.Calendar.Datasources;
 
 
 }
