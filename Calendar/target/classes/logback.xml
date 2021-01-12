@@ -5,7 +5,7 @@
         </encoder>
     </appender>
 
-    <logger name="pl.RadoslawGdynia.GBCalendar" level="ERROR"/>
+    <logger name="pl.RadoslawGdynia.Calendar" level="INFO"/>
 
     <root level="INFO">
         <appender-ref ref="STDOUT"/>

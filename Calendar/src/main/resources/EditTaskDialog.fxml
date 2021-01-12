@@ -3,17 +3,17 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<DialogPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pl.RadoslawGdynia.Calendar.Controllers.EditTaskDialogController">
+<DialogPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.EditTaskDialogController">
 
    <content>
       <AnchorPane prefHeight="200.0" prefWidth="200.0">
          <children>
-            <Label fx:id="TaskDetailsLabel" layoutX="17.0" layoutY="130.0" prefHeight="29.0" prefWidth="86.0" text="Task details:" />
-            <Label fx:id="taskDeadlineLabel" alignment="TOP_LEFT" layoutX="23.0" layoutY="262.0" prefHeight="43.0" prefWidth="570.0" text="Label" wrapText="true" />
-            <TextField fx:id="ETDetailsText" alignment="TOP_LEFT" layoutX="110.0" layoutY="130.0" prefHeight="115.0" prefWidth="435.0" />
-            <DatePicker fx:id="ETDatePicker" layoutX="209.0" layoutY="305.0" prefHeight="35.0" prefWidth="213.0" />
-            <Label fx:id="ETTaskNameLabel" layoutX="20.0" layoutY="60.0" prefHeight="36.0" prefWidth="65.0" text="Task name: " />
-            <TextField fx:id="ETTaskNameField" layoutX="109.0" layoutY="66.0" prefHeight="25.0" prefWidth="435.0" />
+            <Label fx:id="DetailsLabel" layoutX="17.0" layoutY="130.0" prefHeight="29.0" prefWidth="86.0" text="Task details:" />
+            <Label fx:id="deadlineLabel" alignment="TOP_LEFT" layoutX="23.0" layoutY="262.0" prefHeight="43.0" prefWidth="570.0" text="Label" wrapText="true" />
+            <TextField fx:id="detailsText" alignment="TOP_LEFT" layoutX="110.0" layoutY="130.0" prefHeight="115.0" prefWidth="435.0" />
+            <DatePicker fx:id="datePicker" layoutX="209.0" layoutY="305.0" prefHeight="35.0" prefWidth="213.0" />
+            <Label fx:id="NameLabel" layoutX="20.0" layoutY="60.0" prefHeight="36.0" prefWidth="65.0" text="Task name: " />
+            <TextField fx:id="nameField" layoutX="109.0" layoutY="66.0" prefHeight="25.0" prefWidth="435.0" />
             <Button fx:id="applyButton" layoutX="421.0" layoutY="385.0" mnemonicParsing="false" onAction="#handleApplyButton" prefHeight="25.0" prefWidth="79.0" text="Apply" />
             <Button fx:id="cancelButton" layoutX="516.0" layoutY="385.0" mnemonicParsing="false" onAction="#handleCancelButton" prefHeight="25.0" prefWidth="79.0" text="Cancel" />
          </children>

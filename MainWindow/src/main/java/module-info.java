@@ -5,5 +5,5 @@ module MainWindow {
     requires Calendar;
     requires slf4j.api;
 
-    opens pl.RadoslawGdynia.Main.Main;
+    opens GetBetterMain;
 }

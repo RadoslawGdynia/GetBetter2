@@ -7,8 +7,8 @@ open module Calendar {
     requires slf4j.api;
 
 
-    exports pl.RadoslawGdynia.Calendar.Calendar;
-    exports pl.RadoslawGdynia.Calendar.Datasources;
+    exports CalendarMain;
+    exports Models.CalendarModel.Datasources;
 
 
 }
