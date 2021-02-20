@@ -1,8 +1,8 @@
 package Controllers;
 
-import CalendarMain.CalendarMain;
-import Models.CalendarModel.Days.Day;
+import Controllers.DialogControllers.AddSubtaskController;
 import Models.CalendarModel.AbstractFactories.TileFactory;
+import Models.CalendarModel.CalendarModel;
 import Models.CalendarModel.Tasks.Subtask;
 import Models.CalendarModel.Tasks.Task;
 import Models.CalendarModel.Tasks.WorkTask;
@@ -12,8 +12,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
 import java.io.IOException;
@@ -23,13 +23,14 @@ import java.time.format.TextStyle;
 import java.util.Locale;
 import java.util.Optional;
 
+@Getter
+@Slf4j
 public class CalendarController {
 
     // ============== GENERAL: ==============
-    public static final Logger log = LoggerFactory.getLogger(CalendarController.class);
     private static CalendarController instance;
-    private int currentMonthNum, currentYearNum, currentDayNum;
-    private Day selectedDay = CalendarMain.getDays().get(CalendarMain.getDayIndex(LocalDate.now()));
+    private final CalendarModel calendarModel = CalendarModel.getInstance();
+
 
     //============== CALENDAR ==============
 
@@ -55,7 +56,7 @@ public class CalendarController {
     @FXML
     private Pane planningPane;
 
-    // ============== Today Models.CalendarModel.Tasks ==============
+    // ============== Today Tasks ==============
 
     @FXML
     private TreeTableView<Task> subtasksTreeTable;
@@ -83,51 +84,17 @@ public class CalendarController {
 
 
     //============== GENERAL METHODS: ==============
-    public CalendarController() {
-        instance = this;
-    }
 
-    public static CalendarController getInstance() {
+    public static CalendarController getInstance(){
+        if(instance == null){
+            instance = new CalendarController();
+        }
         return instance;
-    }
-
-    public Day getSelectedDay() {
-        return selectedDay;
-    }
-
-    public int getCurrentMonthNum() {
-        return currentMonthNum;
-    }
-
-    public int getCurrentYearNum() {
-        return currentYearNum;
-    }
-
-    public Pane getTimePane() {
-        return timePane;
-    }
-
-    public Label getShowDay() {
-        return showDay;
-    }
-
-    public Pane getPlanningPane() {
-        return planningPane;
-    }
-
-    public TabPane getDetailsTabPane() {
-        return detailsTabPane;
-    }
-
-    public void setSelectedDay(Day selectedDay) {
-        this.selectedDay = selectedDay;
     }
 
     public void initialize() {
         detailsTabPane.setDisable(true);
-        currentMonthNum = selectedDay.getDate().getMonthValue();
-        currentYearNum = selectedDay.getDate().getYear();
-        currentDayNum = selectedDay.getDate().getDayOfMonth();
+        calendarModel.initializeCalendar();
         configureCalendarPane();
     }
     // ============== CALENDAR AREA METHODS: ==============
@@ -177,30 +144,31 @@ public class CalendarController {
 
 
     //============== A. DAY PLAN METHODS: ==============
-    public void configureTimeTiles() {
-        final int TILES_NUMBER = 18;
-        TileFactory.createSetOfTiles("TimeTile", timePane, TILES_NUMBER);
-
-    }
-
-    public void configurePlanTiles() {
-        final int TILES_NUMBER = 72;
-        TileFactory.createSetOfTiles("PlanTile", planningPane, TILES_NUMBER);
-    }
-    public void populateComboBox() {
-        taskSelectionCombo.setItems(selectedDay.getTodayTasks());
-    }
-    public void handleAssignTaskButton(){
-
-    }
-    public void handleClearTileButton(){
-
-    }
+//    public void configureTimeTiles() {
+//        final int TILES_NUMBER = 18;
+//        TileFactory.createSetOfTiles("TimeTile", timePane, TILES_NUMBER);
+//
+//    }
+//
+//    public void configurePlanTiles() {
+//        final int TILES_NUMBER = 72;
+//        TileFactory.createSetOfTiles("PlanTile", planningPane, TILES_NUMBER);
+//    }
+//    public void populateComboBox() {
+//        taskSelectionCombo.setItems(selectedDay.getTodayTasks());
+//    }
+//    public void handleAssignTaskButton(){
+//
+//    }
+//    public void handleClearTileButton(){
+//
+//    }
 
 
     //============ B. TODAY TASK METHODS: ================
 
-    public void configureTasksTable() {
+    public void populateDayAndTaskData() {
+        calendarModel.updateTaskManagingArea();
         tasksTable.setItems(selectedDay.getTodayTasks());
         taskNameColumn.setCellValueFactory(new PropertyValueFactory<>("taskName"));
         taskDetailsColumn.setCellValueFactory(new PropertyValueFactory<>("details"));
@@ -336,8 +304,6 @@ public class CalendarController {
                 selectedDay.removeTask(t);
             }
         }
-
-
-    }
+}
 
 

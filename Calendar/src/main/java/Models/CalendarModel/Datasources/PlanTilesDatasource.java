@@ -83,7 +83,7 @@ public class PlanTilesDatasource {
         try(Statement statement = conn.createStatement()){
             statement.execute(ADD_TILE_DATA);
         } catch (SQLException e) {
-            log.error("Error took place while adding Models.CalendarModel.Tile data to DB. Message: {}", e.getMessage());
+            log.error("Error took place while adding Models.CalendarModel.Tiles data to DB. Message: {}", e.getMessage());
         }
     }
 }

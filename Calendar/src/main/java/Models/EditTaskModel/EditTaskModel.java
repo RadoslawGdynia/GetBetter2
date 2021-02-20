@@ -1,18 +1,15 @@
 package Models.EditTaskModel;
 
-import Controllers.EditTaskDialogController;
+import Controllers.DialogControllers.EditTaskDialogController;
 import Models.CalendarModel.Days.Day;
 import Models.CalendarModel.Tasks.Task;
 import Models.CalendarModel.Tasks.WorkTask;
 import javafx.scene.control.Alert;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.time.LocalDate;
 
 public class EditTaskModel {
 
-    public static final Logger log = LoggerFactory.getLogger(EditTaskModel.class);
     EditTaskDialogController controller;
     private static Task selectedTask;
     private final Day dayOfSelectedTask = selectedTask.getAssignedToDay();
@@ -52,8 +49,6 @@ public class EditTaskModel {
         alert.showAndWait();
     }
 
-
-
     public LocalDate provideDeadline() {
         if (taskHasDeadline()) {
             WorkTask wt = (WorkTask) selectedTask;
@@ -61,13 +56,14 @@ public class EditTaskModel {
         }
         else throw new IllegalArgumentException();
     }
+
     public boolean taskHasDeadline(){
         return selectedTask instanceof WorkTask;
     }
+
     public String provideDetails(){
         return selectedTask.getTaskName();
     }
-
 
     public String provideName(){
         return selectedTask.getTaskName();

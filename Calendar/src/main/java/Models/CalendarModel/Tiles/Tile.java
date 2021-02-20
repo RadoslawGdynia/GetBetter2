@@ -1,4 +1,4 @@
-package Models.CalendarModel.Tile;
+package Models.CalendarModel.Tiles;
 
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;

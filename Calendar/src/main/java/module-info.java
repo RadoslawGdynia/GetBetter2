@@ -5,6 +5,7 @@ open module Calendar {
     requires javafx.graphics;
     requires java.sql;
     requires slf4j.api;
+    requires lombok;
 
 
     exports CalendarMain;

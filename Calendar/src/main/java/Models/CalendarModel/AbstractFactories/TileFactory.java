@@ -2,10 +2,10 @@ package Models.CalendarModel.AbstractFactories;
 
 import javafx.scene.layout.Pane;
 import Controllers.CalendarController;
-import Models.CalendarModel.Tile.CalendarTile;
-import Models.CalendarModel.Tile.PlanTile;
-import Models.CalendarModel.Tile.Tile;
-import Models.CalendarModel.Tile.TimeTile;
+import Models.CalendarModel.Tiles.CalendarTile;
+import Models.CalendarModel.Tiles.PlanTile;
+import Models.CalendarModel.Tiles.Tile;
+import Models.CalendarModel.Tiles.TimeTile;
 
 import java.time.LocalDate;
 
@@ -15,7 +15,8 @@ public class TileFactory {
     public static void createSetOfTiles(String typeOfTile, Pane rootPane, int numberOfTiles) throws IllegalArgumentException {
 
         //========Creation of tiles for days of Month========
-        if (typeOfTile.equals(CalendarTile.class.getSimpleName())) {
+        //if (typeOfTile.equals(CalendarTile.class.getSimpleName())) {
+            if (typeOfTile.equals(CalendarTile.class.getSimpleName())) {
             final int currentYearNum = CalendarController.getInstance().getCurrentYearNum();
             final int currentMonthNum = CalendarController.getInstance().getCurrentMonthNum();
             final int currentDayNum = LocalDate.now().getDayOfMonth();

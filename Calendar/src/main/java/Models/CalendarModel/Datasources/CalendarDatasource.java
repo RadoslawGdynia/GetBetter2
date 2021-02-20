@@ -1,15 +1,13 @@
 package Models.CalendarModel.Datasources;
 
 import Models.CalendarModel.Days.Day;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import java.sql.*;
 import java.time.LocalDate;
 
+@Slf4j
 public class CalendarDatasource {
-
-    public static final Logger log = LoggerFactory.getLogger(CalendarDatasource.class);
 
     public static final String DB_NAME = "GetBetterCalendarDB.db";
 

@@ -1,4 +1,4 @@
-package Models.CalendarModel.Tile;
+package Models.CalendarModel.Tiles;
 
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;

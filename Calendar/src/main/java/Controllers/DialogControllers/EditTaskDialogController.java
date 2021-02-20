@@ -1,4 +1,4 @@
-package Controllers;
+package Controllers.DialogControllers;
 
 import Models.EditTaskModel.EditTaskModel;
 import javafx.fxml.FXML;

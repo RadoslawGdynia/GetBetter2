@@ -1,5 +1,6 @@
-package Controllers;
+package Controllers.DialogControllers;
 
+import Controllers.CalendarController;
 import Models.CalendarModel.AbstractFactories.TaskFactory;
 import Models.CalendarModel.Tasks.WorkTask;
 import javafx.fxml.FXML;

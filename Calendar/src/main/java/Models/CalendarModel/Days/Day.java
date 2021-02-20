@@ -1,6 +1,5 @@
 package Models.CalendarModel.Days;
 
-import CalendarMain.CalendarMain;
 import Models.CalendarModel.Datasources.CalendarDatasource;
 import Models.CalendarModel.Datasources.TaskDatasource;
 import Models.CalendarModel.Tasks.Task;

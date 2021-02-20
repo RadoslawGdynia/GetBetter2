@@ -1,6 +1,5 @@
 package GetBetterMain;
 
-import CalendarMain.CalendarMain;
 import Models.CalendarModel.Datasources.CalendarDatasource;
 import Models.CalendarModel.Datasources.PlanTilesDatasource;
 import Models.CalendarModel.Datasources.TaskDatasource;

@@ -1,6 +1,5 @@
 package Models.CalendarModel.AbstractFactories;
 
-import CalendarMain.CalendarMain;
 import Models.CalendarModel.Datasources.TaskDatasource;
 import Models.CalendarModel.Days.Day;
 import Models.CalendarModel.Tasks.Subtask;
