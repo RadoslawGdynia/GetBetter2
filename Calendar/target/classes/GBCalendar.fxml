@@ -17,7 +17,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="mainPane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1700.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.CalendarController">
+<AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1700.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.CalendarController">
    <TabPane fx:id="detailsTabPane" layoutX="601.0" layoutY="-2.0" prefHeight="800.0" prefWidth="755.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="945.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
      <tabs>
          <Tab closable="false" text="Day Plan">
@@ -29,7 +29,8 @@
                      <Label fx:id="showDay" alignment="CENTER" layoutY="5.0" maxHeight="-Infinity" prefHeight="95.0" prefWidth="755.0" style="-fx-background-color: #dba967;" text="Label" textFill="#735937" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="5.0">
                         <font>
                            <Font name="Calibri Bold" size="36.0" />
-                        </font></Label>
+                        </font>
+                     </Label>
                      <Separator layoutX="146.0" layoutY="99.0" prefHeight="4.0" prefWidth="314.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
                      <VBox layoutX="529.0" layoutY="103.0" prefHeight="663.0" prefWidth="221.0" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="108.0">
                         <children>
@@ -48,7 +49,7 @@
                                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                               </VBox.margin>
                            </Button>
-                           <Button mnemonicParsing="false" onAction="#handleClearTileButton" prefHeight="50.0" prefWidth="226.0" text="Clear Models.CalendarModel.Tile">
+                           <Button mnemonicParsing="false" onAction="#handleClearTileButton" prefHeight="50.0" prefWidth="226.0" text="Clear Models.CalendarModel.Tiles">
                               <VBox.margin>
                                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                               </VBox.margin>
@@ -59,19 +60,19 @@
                </AnchorPane>
             </content>
          </Tab>
-       <Tab closable="false" text="Todays Models.CalendarModel.Tasks">
+       <Tab closable="false" text="Today Tasks">
          <content>
            <AnchorPane disable="true" minHeight="0.0" minWidth="0.0" prefHeight="605.0" prefWidth="600.0" style="-fx-background-color: BLANCHEDALMOND;">
                   <children>
                      <Button fx:id="addTaskButton" layoutX="554.0" layoutY="49.0" mnemonicParsing="false" onAction="#handleAddTaskClick" prefHeight="26.0" prefWidth="118.0" text="New Task" />
                      <Button fx:id="editTaskButton" disable="true" layoutX="553.0" layoutY="145.0" mnemonicParsing="false" onAction="#handleEditTaskClick" prefHeight="26.0" prefWidth="121.0" text="Edit Task" />
                      <Button fx:id="deleteTaskButton" disable="true" layoutX="552.0" layoutY="193.0" mnemonicParsing="false" onAction="#handleDeleteTaskClick" prefHeight="25.0" prefWidth="123.0" text="Delete Task" />
-                      <Button fx:id="addTaskButton" disable="true" layoutX="553.0" layoutY="97.0" mnemonicParsing="false" onAction="#handleAddSubtaskClick" prefHeight="26.0" prefWidth="120.0" text="Add Subtask" />
+                      <Button fx:id="addSubtaskButton" disable="true" layoutX="553.0" layoutY="97.0" mnemonicParsing="false" onAction="#handleAddSubtaskClick" prefHeight="26.0" prefWidth="120.0" text="Add Subtask" />
                      <TreeTableView fx:id="subtasksTreeTable" layoutX="36.0" layoutY="295.0" prefHeight="442.0" prefWidth="495.0" showRoot="false">
                        <columns>
                            <TreeTableColumn fx:id="subtaskNameColumn" prefWidth="179.0" text="Name" />
                            <TreeTableColumn fx:id="subtaskFinalisedColumn" minWidth="7.0" prefWidth="85.0" text="Completed" />
-                           <TreeTableColumn fx:id="subtaskProgressColumn" prefWidth="230.0" text="Progress" />
+                           <!--<TreeTableColumn fx:id="subtaskProgressColumn" prefWidth="230.0" text="Progress" />-->
                        </columns>
                      </TreeTableView>
                       <TableView fx:id="tasksTable" layoutX="36.0" layoutY="56.0" onMouseClicked="#handleTaskSelection" prefHeight="230.0" prefWidth="496.0">

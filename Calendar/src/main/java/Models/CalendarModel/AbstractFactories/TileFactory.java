@@ -1,11 +1,11 @@
 package Models.CalendarModel.AbstractFactories;
 
-import javafx.scene.layout.Pane;
-import Controllers.CalendarController;
+import Models.CalendarModel.CalendarModel;
 import Models.CalendarModel.Tiles.CalendarTile;
 import Models.CalendarModel.Tiles.PlanTile;
 import Models.CalendarModel.Tiles.Tile;
 import Models.CalendarModel.Tiles.TimeTile;
+import javafx.scene.layout.Pane;
 
 import java.time.LocalDate;
 
@@ -15,16 +15,15 @@ public class TileFactory {
     public static void createSetOfTiles(String typeOfTile, Pane rootPane, int numberOfTiles) throws IllegalArgumentException {
 
         //========Creation of tiles for days of Month========
-        //if (typeOfTile.equals(CalendarTile.class.getSimpleName())) {
-            if (typeOfTile.equals(CalendarTile.class.getSimpleName())) {
-            final int currentYearNum = CalendarController.getInstance().getCurrentYearNum();
-            final int currentMonthNum = CalendarController.getInstance().getCurrentMonthNum();
-            final int currentDayNum = LocalDate.now().getDayOfMonth();
+        if (typeOfTile.equals(CalendarTile.class.getSimpleName())) {
+            final int observedYearNum = CalendarModel.getInstance().getCurrentYearNum();
+            final int observedMonthNum = CalendarModel.getInstance().getCurrentMonthNum();
 
-            int firstDayOfMonth = LocalDate.of(currentYearNum, currentMonthNum, currentDayNum - (currentDayNum - 1)).getDayOfWeek().getValue();
-            int numberOfDaysInCurrentMonth = LocalDate.of(currentYearNum, currentMonthNum, currentDayNum).getMonth().maxLength();
-            if(currentMonthNum == 2){
-                numberOfDaysInCurrentMonth = ((currentYearNum%4==0 && currentYearNum%100!=0) || (currentYearNum%400==0) )? 29:28;
+
+            int firstDayOfMonth = LocalDate.of(observedYearNum, observedMonthNum, 1).getDayOfWeek().getValue();
+            int numberOfDaysInCurrentMonth = LocalDate.of(observedYearNum, observedMonthNum, 1).getMonth().maxLength();
+            if (observedMonthNum == 2) {
+                numberOfDaysInCurrentMonth = ((observedYearNum % 4 == 0 && observedYearNum % 100 != 0) || (observedYearNum % 400 == 0)) ? 29 : 28;
             }
 
 
@@ -70,7 +69,7 @@ public class TileFactory {
         //========Creation of tiles for tasks to be assigned========
         else if (typeOfTile.equals(PlanTile.class.getSimpleName())) {
             for (int i = 1; i <= numberOfTiles; i++) {
-                Tile planTile = new Tile(rootPane, i , "Plan", 200, 9, new PlanTile());
+                Tile planTile = new Tile(rootPane, i, "Plan", 200, 9, new PlanTile());
             }
 
         } else {

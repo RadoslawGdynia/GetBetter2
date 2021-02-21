@@ -7,6 +7,7 @@ import Models.CalendarModel.Tasks.Subtask;
 import Models.CalendarModel.Tasks.Task;
 import Models.CalendarModel.Tasks.WorkTask;
 import Models.EditTaskModel.EditTaskModel;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
@@ -19,18 +20,15 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
-import java.time.format.TextStyle;
-import java.util.Locale;
 import java.util.Optional;
 
-@Getter
 @Slf4j
 public class CalendarController {
 
-    // ============== GENERAL: ==============
-    private static CalendarController instance;
-    private final CalendarModel calendarModel = CalendarModel.getInstance();
 
+    // ============== GENERAL: ==============
+    @Getter private static CalendarController instance;
+    private static final CalendarModel calendarModel = CalendarModel.getInstance();
 
     //============== CALENDAR ==============
 
@@ -43,17 +41,20 @@ public class CalendarController {
 
 
     // ============== DAY DETAILS ==============
-    @FXML
+    @FXML @Getter
     private TabPane detailsTabPane;
 
     // ============== Day Plan ==============
     @FXML
     private Label showDay;
     @FXML
+    @Getter
     private ComboBox<Task> taskSelectionCombo;
     @FXML
+    @Getter
     private Pane timePane;
     @FXML
+    @Getter
     private Pane planningPane;
 
     // ============== Today Tasks ==============
@@ -81,55 +82,53 @@ public class CalendarController {
     private Button editTaskButton;
     @FXML
     private Button deleteTaskButton;
+    @FXML
+    private Button addSubtaskButton;
 
 
     //============== GENERAL METHODS: ==============
 
-    public static CalendarController getInstance(){
-        if(instance == null){
-            instance = new CalendarController();
-        }
-        return instance;
+    public CalendarController() {
+        instance = this;
     }
 
     public void initialize() {
-        detailsTabPane.setDisable(true);
         calendarModel.initializeCalendar();
+        configurePlanTiles();
+        configureTimeTiles();
         configureCalendarPane();
+        populateDayAndTaskData();
     }
+
     // ============== CALENDAR AREA METHODS: ==============
 
     private void configureCalendarPane() {
 
-        monthName.setText(LocalDate.of(currentYearNum, currentMonthNum, currentDayNum).getMonth().getDisplayName(TextStyle.FULL, Locale.ENGLISH));
-        yearNumber.setText(String.valueOf(currentYearNum));
+        monthName.setText(calendarModel.provideCurrentlySelectedMonthName());
+        yearNumber.setText(calendarModel.provideCurrentlySelectedYearValue());
         TileFactory.createSetOfTiles("CalendarTile", daysTilePane, 42);
     }
 
     public void handleMonthBack() {
         daysTilePane.getChildren().clear();
-        if (currentMonthNum == 1) {
-            currentMonthNum = 12;
-            currentYearNum--;
+        if (calendarModel.getCurrentMonthNum() == 1) {
+            calendarModel.changeCurrentMonthFromJanuaryToDecember();
         } else {
-            currentMonthNum--;
+            calendarModel.decreaseCurrentMonthBy1();
         }
-        detailsTabPane.setDisable(true);
         configureCalendarPane();
-        log.info("Currently chosen month is: {}", LocalDate.of(currentYearNum, currentMonthNum, currentDayNum).getMonth().getDisplayName(TextStyle.FULL, Locale.ENGLISH));
+        log.info("Currently chosen month is: {}", calendarModel.provideCurrentlySelectedMonthName());
     }
 
     public void handleMonthForward() {
         daysTilePane.getChildren().clear();
-        if (currentMonthNum == 12) {
-            currentMonthNum = 1;
-            currentYearNum++;
+        if (calendarModel.getCurrentMonthNum() == 12) {
+            calendarModel.changeCurrentMonthFromDecemberToJanuary();
         } else {
-            currentMonthNum++;
+            calendarModel.increaseCurrentMonthBy1();
         }
-        detailsTabPane.setDisable(true);
         configureCalendarPane();
-        log.info("Currently chosen month is: {}", LocalDate.of(currentYearNum, currentMonthNum, currentDayNum).getMonth().getDisplayName(TextStyle.FULL, Locale.ENGLISH));
+        log.info("Currently chosen month is: {}", calendarModel.provideCurrentlySelectedMonthName());
     }
 
     //============== DAY DETAILS METHODS: ==============
@@ -144,32 +143,32 @@ public class CalendarController {
 
 
     //============== A. DAY PLAN METHODS: ==============
-//    public void configureTimeTiles() {
-//        final int TILES_NUMBER = 18;
-//        TileFactory.createSetOfTiles("TimeTile", timePane, TILES_NUMBER);
-//
-//    }
-//
-//    public void configurePlanTiles() {
-//        final int TILES_NUMBER = 72;
-//        TileFactory.createSetOfTiles("PlanTile", planningPane, TILES_NUMBER);
-//    }
-//    public void populateComboBox() {
-//        taskSelectionCombo.setItems(selectedDay.getTodayTasks());
-//    }
-//    public void handleAssignTaskButton(){
-//
-//    }
-//    public void handleClearTileButton(){
-//
-//    }
+    public void configureTimeTiles() {
+        final int TILES_NUMBER = 18;
+        TileFactory.createSetOfTiles("TimeTile", timePane, TILES_NUMBER);
+
+    }
+
+    public void configurePlanTiles() {
+        final int TILES_NUMBER = 72;
+        TileFactory.createSetOfTiles("PlanTile", planningPane, TILES_NUMBER);
+    }
+    public void populateComboBox() {
+        //taskSelectionCombo.setItems(selectedDay.getTodayTasks());
+    }
+    public void handleAssignTaskButton(){
+
+    }
+    public void handleClearTileButton(){
+
+    }
 
 
     //============ B. TODAY TASK METHODS: ================
 
     public void populateDayAndTaskData() {
-        calendarModel.updateTaskManagingArea();
-        tasksTable.setItems(selectedDay.getTodayTasks());
+
+        tasksTable.setItems(calendarModel.provideTasksOfSelectedDay());
         taskNameColumn.setCellValueFactory(new PropertyValueFactory<>("taskName"));
         taskDetailsColumn.setCellValueFactory(new PropertyValueFactory<>("details"));
         //taskDeadlineColumn.setCellValueFactory(new PropertyValueFactory<>("deadline"));
@@ -223,87 +222,109 @@ public class CalendarController {
         subtaskFinalisedColumn.setCellValueFactory(parameter -> parameter.getValue().getValue().getObservableFinalised());
     }
 
-        public void handleAddTaskClick () {
+    public void handleAddTaskClick() {
+        Dialog<ButtonType> dialog = new Dialog<>();
+        dialog.setTitle("Addition of task to the day: " + calendarModel.provideDateOfSelectedDay());
+
+
+        try {
+            URL url = new File("Calendar/src/main/resources/AddTaskDialog.fxml").toURI().toURL();
+            dialog.getDialogPane().setContent(FXMLLoader.load(url));
+            dialog.showAndWait();
+
+        } catch (NullPointerException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Lack of information");
+            alert.setHeaderText("You are trying to create task without necessary information.");
+            alert.setContentText("Task name is required.");
+
+        } catch (IOException e) {
+            log.error("Could not load the dialog");
+            e.printStackTrace();
+        }
+
+    }
+
+    public void handleAddSubtaskClick() {
+        Task task = tasksTable.getSelectionModel().getSelectedItem();
+        if (task == null) {
+            noTaskSelected();
+        } else {
+            WorkTask wt = (WorkTask) task;
+            AddSubtaskController.setSelectedWorkTask(wt);
             Dialog<ButtonType> dialog = new Dialog<>();
-            dialog.setTitle("Addition of task to the day: " + selectedDay.getDate());
-
-
+            dialog.setTitle("Addition of subtask to task: " + task.getTaskName());
             try {
-                URL url = new File("Calendar/src/main/resources/AddTaskDialog.fxml").toURI().toURL();
+                URL url = new File("Calendar/src/main/resources/AddSubtaskDialog.fxml").toURI().toURL();
                 dialog.getDialogPane().setContent(FXMLLoader.load(url));
                 dialog.showAndWait();
-
-            } catch (NullPointerException e) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Lack of information");
-                alert.setHeaderText("You are trying to create task without necessary information.");
-                alert.setContentText("Task name is required.");
 
             } catch (IOException e) {
                 log.error("Could not load the dialog");
                 e.printStackTrace();
             }
-
         }
+    }
 
-        public void handleAddSubtaskClick (){
-            Task task = tasksTable.getSelectionModel().getSelectedItem();
-            if (task == null) {
-                noTaskSelected();
-            } else {
-                WorkTask wt = (WorkTask) task;
-                AddSubtaskController.setSelectedWorkTask(wt);
-                Dialog<ButtonType> dialog = new Dialog<>();
-                dialog.setTitle("Addition of subtask to task: " + task.getTaskName());
-                try {
-                    URL url = new File("Calendar/src/main/resources/AddSubtaskDialog.fxml").toURI().toURL();
-                    dialog.getDialogPane().setContent(FXMLLoader.load(url));
-                    dialog.showAndWait();
+    public void handleEditTaskClick() {
+        Task task = tasksTable.getSelectionModel().getSelectedItem();
+        if (task == null) {
+            noTaskSelected();
+        } else {
+            EditTaskModel.setSelectedTask(task);
+            Dialog<ButtonType> dialog = new Dialog<>();
+            dialog.setTitle("Editing task: " + task.getTaskName());
 
-                } catch (IOException e) {
-                    log.error("Could not load the dialog");
-                    e.printStackTrace();
-                }
+
+            try {
+                URL url = new File("Calendar/src/main/resources/EditTaskDialog.fxml").toURI().toURL();
+                dialog.getDialogPane().setContent(FXMLLoader.load(url));
+                dialog.showAndWait();
+            } catch (IOException e) {
+                log.error("Could not load the dialog");
+                e.printStackTrace();
             }
         }
+    }
 
-        public void handleEditTaskClick () {
-            Task task = tasksTable.getSelectionModel().getSelectedItem();
-            if (task == null) {
-                noTaskSelected();
-            } else {
-                EditTaskModel.setSelectedTask(task);
-                Dialog<ButtonType> dialog = new Dialog<>();
-                dialog.setTitle("Editing task: " + task.getTaskName());
+    public void handleDeleteTaskClick() {
+        Task task = tasksTable.getSelectionModel().getSelectedItem();
+        deleteTask(task);
+    }
 
+    public void deleteTask(Task taskToDelete) {
+        Alert a = new Alert(Alert.AlertType.CONFIRMATION);
+        a.setTitle("Task deletion");
+        a.setHeaderText("You intend to delete task: " + taskToDelete.getTaskName());
+        a.setContentText("Are you sure you want to proceed? This operation is irreversible and you have put this task in the calendar for a good reason");
+        Optional<ButtonType> result = a.showAndWait();
 
-                try {
-                    URL url = new File("Calendar/src/main/resources/EditTaskDialog.fxml").toURI().toURL();
-                    dialog.getDialogPane().setContent(FXMLLoader.load(url));
-                    dialog.showAndWait();
-                } catch (IOException e) {
-                    log.error("Could not load the dialog");
-                    e.printStackTrace();
-                }
-            }
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            calendarModel.removeTaskFromSelectedDay(taskToDelete);
+        }
+    }
+    public void handleCalendarTileClick(String text){
+        try {
+            showDay.setText(text);
+            log.info("Text for the label: {}", calendarModel.provideDateOfSelectedDay().toString());
+            showDay.setText(calendarModel.provideDateOfSelectedDay().toString());
+            timePane.getChildren().remove(0, timePane.getChildren().size());
+            planningPane.getChildren().remove(0, planningPane.getChildren().size());
+            log.info("Starting to populate the area");
+            populateDayAndTaskData();
+            calendarModel.updateTaskManagingArea();
+        } catch (NullPointerException e) {
+            log.error("Program is unable to change FXML fields");
         }
 
-        public void handleDeleteTaskClick (){
-            Task task = tasksTable.getSelectionModel().getSelectedItem();
-            deleteTask(task);
-        }
+    }
 
-        public void deleteTask (Task t){
-            Alert a = new Alert(Alert.AlertType.CONFIRMATION);
-            a.setTitle("Task deletion");
-            a.setHeaderText("You intend to delete task: " + t.getTaskName());
-            a.setContentText("Are you sure you want to proceed? This operation is irreversible and you have put this task in the calendar for a good reason");
-            Optional<ButtonType> result = a.showAndWait();
 
-            if (result.isPresent() && result.get() == ButtonType.OK) {
-                selectedDay.removeTask(t);
-            }
-        }
+    public void handleAssignTaskButton(ActionEvent actionEvent) {
+    }
+
+    public void handleClearTileButton(ActionEvent actionEvent) {
+    }
 }
 
 

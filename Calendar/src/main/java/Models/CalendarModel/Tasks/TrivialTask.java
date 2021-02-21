@@ -14,8 +14,9 @@ public class TrivialTask extends Task {
         super(day, name, details);
         day.addTask(this);
     }
+
     public TrivialTask(Day day, String name, String details, boolean finalised) {
-        super(day,name, details);
+        super(day, name, details);
         this.setFinalised(finalised);
         day.addTask(this);
     }

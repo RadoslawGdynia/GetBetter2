@@ -17,31 +17,35 @@ public class EditTaskModel {
     public EditTaskModel(EditTaskDialogController controller) {
         this.controller = controller;
     }
-    public void implementChanges(String newName, String newDetails, LocalDate newDeadline){
-        if(nameIsTaken(newName)){
+
+    public void implementChanges(String newName, String newDetails, LocalDate newDeadline) {
+        if (nameIsTaken(newName)) {
             createAlertOfNameTaken();
             return;
         }
         changeName(newName);
         changeDetails(newDetails);
-        if(taskHasDeadline()) changeDeadline(newDeadline);
+        if (taskHasDeadline()) changeDeadline(newDeadline);
     }
 
-    private void changeName(String newName){
+    private void changeName(String newName) {
         selectedTask.editNameInApplicationAndDB(newName);
     }
-    private void changeDetails(String newDetails){
+
+    private void changeDetails(String newDetails) {
         selectedTask.editDetailsInApplicationAndDB(newDetails);
 
     }
-    private void changeDeadline(LocalDate newDeadline){
+
+    private void changeDeadline(LocalDate newDeadline) {
         ((WorkTask) selectedTask).editTaskDeadlineInApplicationAndDB(newDeadline);
     }
 
-    private boolean nameIsTaken(String newName){
+    private boolean nameIsTaken(String newName) {
         return dayOfSelectedTask.taskNameIsUsed(newName);
     }
-    private void createAlertOfNameTaken(){
+
+    private void createAlertOfNameTaken() {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Illegal name");
         alert.setHeaderText("Name of the task you have chosen is already used in day: " + dayOfSelectedTask.getDate());
@@ -53,19 +57,18 @@ public class EditTaskModel {
         if (taskHasDeadline()) {
             WorkTask wt = (WorkTask) selectedTask;
             return wt.getDeadline();
-        }
-        else throw new IllegalArgumentException();
+        } else throw new IllegalArgumentException();
     }
 
-    public boolean taskHasDeadline(){
+    public boolean taskHasDeadline() {
         return selectedTask instanceof WorkTask;
     }
 
-    public String provideDetails(){
+    public String provideDetails() {
         return selectedTask.getTaskName();
     }
 
-    public String provideName(){
+    public String provideName() {
         return selectedTask.getTaskName();
     }
 

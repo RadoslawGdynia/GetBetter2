@@ -6,6 +6,8 @@ import javafx.scene.text.Text;
 public interface ITileModifier {
 
     Rectangle modifyLayout(int xPixels, int yPixels);
+
     Text modifyText(String display);
+
     void handleClick();
 }

@@ -98,7 +98,8 @@ public class WorkTask extends Task implements Comparable<WorkTask> {
                 }
             }
             this.subtasks.add(added);
-            if(TaskDatasource.getInstance().subtaskNotInDB(this, added.getTaskName())) TaskDatasource.getInstance().addSubtaskToDB(this, added);
+            if (TaskDatasource.getInstance().subtaskNotInDB(this, added.getTaskName()))
+                TaskDatasource.getInstance().addSubtaskToDB(this, added);
 
         } catch (NullPointerException e) {
             log.error("Problem with subtask addition");

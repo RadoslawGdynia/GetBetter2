@@ -10,16 +10,13 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.stage.Stage;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
 import java.net.URL;
 
-
+@Slf4j
 public class GetBetterMain extends Application {
-
-    public static final Logger log = LoggerFactory.getLogger(GetBetterMain.class);
 
 
     @Override
@@ -33,7 +30,6 @@ public class GetBetterMain extends Application {
         }
         TaskDatasource.getInstance().open();
         PlanTilesDatasource.getInstance().open();
-        CalendarMain.loadCalendar();
     }
 
     @Override
@@ -55,9 +51,7 @@ public class GetBetterMain extends Application {
 
     public static void main(String[] args) {
        launch(args);
-
     }
-
 
     @Override
     public void stop() {

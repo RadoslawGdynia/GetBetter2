@@ -10,21 +10,23 @@ public class PlanTilesManager {
     public static final Logger log = LoggerFactory.getLogger(PlanTilesManager.class);
     public static PlanTilesManager instance;
     private final List<PlanTile> selectedTiles;
+
     private PlanTilesManager() {
         this.selectedTiles = new ArrayList<>();
     }
 
-    public static PlanTilesManager getInstance(){
-        if(instance==null){
+    public static PlanTilesManager getInstance() {
+        if (instance == null) {
             instance = new PlanTilesManager();
         }
         return instance;
     }
 
-    public void addTileToList(PlanTile tile){
+    public void addTileToList(PlanTile tile) {
         selectedTiles.add(tile);
     }
-    public void removeTileFromList(PlanTile tile){
+
+    public void removeTileFromList(PlanTile tile) {
         selectedTiles.remove(tile);
     }
 }

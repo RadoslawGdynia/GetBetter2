@@ -7,7 +7,7 @@ import javafx.scene.text.Text;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class Tile extends StackPane  {
+public class Tile extends StackPane {
 
     public static final Logger log = LoggerFactory.getLogger(Tile.class);
     private final Pane root;
@@ -23,8 +23,7 @@ public class Tile extends StackPane  {
 
         getChildren().addAll(shape, text);
 
-        this.setOnMouseClicked(event -> modifier.handleClick());
-
+        this.setOnMouseClicked(mouseEvent -> modifier.handleClick());
 
 
     }

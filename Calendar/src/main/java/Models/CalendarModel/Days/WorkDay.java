@@ -13,6 +13,7 @@ public class WorkDay extends Day {
     public WorkDay(LocalDate date) {
         super(date);
     }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

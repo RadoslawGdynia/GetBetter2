@@ -1,4 +1,9 @@
 open module Calendar {
+    exports Models.CalendarModel;
+    exports Models.CalendarModel.Datasources;
+    exports Models.CalendarModel.Days;
+    exports Controllers;
+    exports Models.CalendarModel.Tasks;
 
     requires javafx.controls;
     requires javafx.fxml;
@@ -6,10 +11,5 @@ open module Calendar {
     requires java.sql;
     requires slf4j.api;
     requires lombok;
-
-
-    exports CalendarMain;
-    exports Models.CalendarModel.Datasources;
-
 
 }

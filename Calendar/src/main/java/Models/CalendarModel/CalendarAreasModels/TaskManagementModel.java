@@ -1,12 +1,10 @@
 package Models.CalendarModel.CalendarAreasModels;
 
-public class TaskManagementModel {
-    private static TaskManagementModel instance;
+import lombok.Getter;
 
-    public static TaskManagementModel getInstance(){
-        if(instance==null){
-            instance = new TaskManagementModel();
-        }
-        return instance;
-    }
+public class TaskManagementModel {
+
+    @Getter
+    private  final TaskManagementModel instance = new TaskManagementModel();
+
 }

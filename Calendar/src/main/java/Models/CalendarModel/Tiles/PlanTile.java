@@ -32,17 +32,19 @@ public class PlanTile implements ITileModifier {
         text.setTextAlignment(TextAlignment.CENTER);
         return text;
     }
-    public void setColor(String color){
+
+    public void setColor(String color) {
         this.color = Color.valueOf(color);
     }
-    public void setTileText(String text){
+
+    public void setTileText(String text) {
 
     }
 
     @Override
     public void handleClick() {
         this.selected = !selected;
-        if(this.selected) {
+        if (this.selected) {
             PlanTilesManager.getInstance().addTileToList(this);
         } else {
             PlanTilesManager.getInstance().removeTileFromList(this);

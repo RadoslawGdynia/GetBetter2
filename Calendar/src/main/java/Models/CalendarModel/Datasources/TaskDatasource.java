@@ -1,12 +1,12 @@
 package Models.CalendarModel.Datasources;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import Models.CalendarModel.Days.Day;
 import Models.CalendarModel.AbstractFactories.TaskFactory;
+import Models.CalendarModel.Days.Day;
 import Models.CalendarModel.Tasks.Subtask;
 import Models.CalendarModel.Tasks.Task;
 import Models.CalendarModel.Tasks.WorkTask;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.*;
 import java.time.LocalDate;
@@ -18,8 +18,9 @@ public class TaskDatasource {
     public static final String DB_NAME = "GetBetterCalendarDB.db";
 
     public static final String CONNECTION_STRING = "jdbc:sqlite:P:\\GitHub repozytoria\\Repozytoria Online\\GetBetter\\Calendar\\src\\main\\resources\\" + DB_NAME;
-    private Connection conn;
     private static TaskDatasource instance = new TaskDatasource();
+    private TaskFactory taskFactory = new TaskFactory();
+    private Connection conn;
 
 
     public final String TABLE_TASKS = "Tasks";
@@ -30,7 +31,7 @@ public class TaskDatasource {
     public final String COLUMN_TASKS_FINALISED = "Finalised";
     public final String COLUMN_TASKS_POINTVALUE = "PointValue";
     public final String COLUMN_TASKS_DEADLINE = "Deadline";
-    public final String COLUMN_TASKS_DEADLINECOUNTER= "DeadlineCounter";
+    public final String COLUMN_TASKS_DEADLINECOUNTER = "DeadlineCounter";
 
     public final String TABLE_SUBTASKS = "Subtasks";
     public final String COLUMN_SUBTASKS_DAYID = "DayID";
@@ -62,11 +63,12 @@ public class TaskDatasource {
 
         }
     }
+
     public void addTaskToDB(Task task) {
         int dayID = task.getAssignedToDay().getDayID();
         StringBuilder sb = new StringBuilder();
-        sb.append("INSERT INTO " +  TABLE_TASKS +" ("+ COLUMN_TASKS_DAYID + ", " + COLUMN_TASKS_CLASS + ", " + COLUMN_TASKS_NAME +
-                ", " + COLUMN_TASKS_DETAILS +", " + COLUMN_TASKS_FINALISED +", " + COLUMN_TASKS_POINTVALUE+", " + COLUMN_TASKS_DEADLINE + ", " + COLUMN_TASKS_DEADLINECOUNTER +")  VALUES ( ");
+        sb.append("INSERT INTO " + TABLE_TASKS + " (" + COLUMN_TASKS_DAYID + ", " + COLUMN_TASKS_CLASS + ", " + COLUMN_TASKS_NAME +
+                ", " + COLUMN_TASKS_DETAILS + ", " + COLUMN_TASKS_FINALISED + ", " + COLUMN_TASKS_POINTVALUE + ", " + COLUMN_TASKS_DEADLINE + ", " + COLUMN_TASKS_DEADLINECOUNTER + ")  VALUES ( ");
         sb.append(dayID);
         sb.append(", \"");
         sb.append(task.getClass().getSimpleName().trim());
@@ -98,6 +100,7 @@ public class TaskDatasource {
             log.error("Error took place while saving task {} to the DB \n Message: {}", task.getTaskName(), e.getMessage());
         }
     }
+
     public void addSubtaskToDB(Task parent, Subtask task) {
         int dayID = parent.getAssignedToDay().getDayID();
         String parentName = parent.getTaskName();
@@ -122,6 +125,7 @@ public class TaskDatasource {
         }
 
     }
+
     public void editTaskDEADLINEInDB(Task task, LocalDate date) {
         int dayID = task.getAssignedToDay().getDayID();
         String DEADLINE_UPDATE = "UPDATE \"" + TABLE_TASKS + "\" SET \"" + COLUMN_TASKS_DEADLINE + "\"=\"" + date.toString() +
@@ -171,24 +175,25 @@ public class TaskDatasource {
     public void deleteTaskFromDB(Task task) {
         int dayID = task.getAssignedToDay().getDayID();
         String TASK_DELETE = "DELETE FROM \"" + TABLE_TASKS + "\" WHERE DayID=\"" + dayID + "\" AND Models.CalendarModel.Tasks.Name=\"" + task.getTaskName() + "\"";
-        String SUBTASKS_DELETE = "DELETE FROM \"" + TABLE_SUBTASKS + "\" WHERE \"" + COLUMN_SUBTASKS_PARENT + "\"=\"" + task.getTaskName()+"\"";
+        String SUBTASKS_DELETE = "DELETE FROM \"" + TABLE_SUBTASKS + "\" WHERE \"" + COLUMN_SUBTASKS_PARENT + "\"=\"" + task.getTaskName() + "\"";
         try (Statement statement = conn.createStatement()) {
             statement.execute(TASK_DELETE);
-            if(task.getClass().getSimpleName().equals("WorkTask")){
+            if (task.getClass().getSimpleName().equals("WorkTask")) {
                 statement.execute(SUBTASKS_DELETE);
             }
         } catch (SQLException e) {
             log.error("Error took place while canceling task {} from DB", task.getTaskName());
         }
     }
-    public void loadTasksOfDay(Day day) {
-        String QUERY_TASKS = "SELECT * FROM \"" + TABLE_TASKS + "\" WHERE \"" + COLUMN_TASKS_DAYID + "\"=\"" + day.getDayID() + "\"" ;
 
-        try(Statement statement = conn.createStatement()){
+    public void loadTasksOfDay(Day day) {
+        String QUERY_TASKS = "SELECT * FROM \"" + TABLE_TASKS + "\" WHERE \"" + COLUMN_TASKS_DAYID + "\"=\"" + day.getDayID() + "\"";
+
+        try (Statement statement = conn.createStatement()) {
             statement.execute(QUERY_TASKS);
             ResultSet results = statement.getResultSet();
-            int taskNumberVerification=0;
-            while(results.next()){
+            int taskNumberVerification = 0;
+            while (results.next()) {
                 int dayID = results.getInt(COLUMN_TASKS_DAYID);
                 String taskClass = results.getString(COLUMN_TASKS_CLASS);
                 String name = results.getString(COLUMN_TASKS_NAME);
@@ -198,68 +203,73 @@ public class TaskDatasource {
                 String deadlineText = results.getString(COLUMN_TASKS_DEADLINE);
                 LocalDate deadline = deadlineText.equals("null") ? null : LocalDate.parse(deadlineText);
                 int deadlineCounter = results.getInt(COLUMN_TASKS_DEADLINECOUNTER);
-                TaskFactory.reloadTask(dayID, taskClass, name, details, finalised, points, deadline, deadlineCounter);
+                taskFactory.reloadTask(dayID, taskClass, name, details, finalised, points, deadline, deadlineCounter);
                 taskNumberVerification++;
             }
-            if(day.getTaskNumber()!=taskNumberVerification) log.error("WARNING: loaded number of tasks is different than recorded in database.\n" +
-                    "Should be: " + day.getTaskNumber() +"\t was loaded: " + taskNumberVerification);
+            if (day.getTaskNumber() != taskNumberVerification)
+                log.error("WARNING: loaded number of tasks is different than recorded in database.\n" +
+                        "Should be: " + day.getTaskNumber() + "\t was loaded: " + taskNumberVerification);
 
         } catch (SQLException e) {
             log.error("Error took place while loading tasks for day: {}", day.getDate());
         }
 
     }
-    public void querySubtasks(Task task){
+
+    public void querySubtasks(Task task) {
 
         int dayID = task.getAssignedToDay().getDayID();
-        String QUERY_SUBTASKS = "SELECT * FROM " +TABLE_SUBTASKS + " WHERE " + COLUMN_SUBTASKS_DAYID +"=\"" + dayID + "\" AND " + COLUMN_SUBTASKS_PARENT +"=\"" + task.getTaskName()+"\"";
+        String QUERY_SUBTASKS = "SELECT * FROM " + TABLE_SUBTASKS + " WHERE " + COLUMN_SUBTASKS_DAYID + "=\"" + dayID + "\" AND " + COLUMN_SUBTASKS_PARENT + "=\"" + task.getTaskName() + "\"";
 
-        try(Statement statement = conn.createStatement()){
+        try (Statement statement = conn.createStatement()) {
 
             statement.execute(QUERY_SUBTASKS);
             ResultSet results = statement.getResultSet();
 
-            while(results.next()){
+            while (results.next()) {
                 String name = results.getString(COLUMN_SUBTASKS_NAME);
                 String details = results.getString(COLUMN_SUBTASKS_DETAILS);
                 boolean finalised = Boolean.parseBoolean(results.getString(COLUMN_SUBTASKS_FINALISED));
                 WorkTask parent = (WorkTask) task;
-                TaskFactory.reloadSubtask(dayID, name, details,finalised, parent);
+                taskFactory.reloadSubtask(dayID, name, details, finalised, parent);
 
             }
-        }catch (SQLException e) {
+        } catch (SQLException e) {
             log.error("Error took place while querying subtasks for task: {}}. Message: {}", task.getTaskName(), e.getMessage());
         }
 
     }
-    public boolean taskNotInDB(int dayID, String taskName){
-        String QUERY_TASK = "SELECT * FROM " + TABLE_TASKS + " WHERE \"" + COLUMN_TASKS_DAYID +"\"=\"" + dayID + "\" AND \"" + COLUMN_TASKS_NAME +"\"=\"" + taskName+"\"";
+
+    public boolean taskNotInDB(int dayID, String taskName) {
+        String QUERY_TASK = "SELECT * FROM " + TABLE_TASKS + " WHERE \"" + COLUMN_TASKS_DAYID + "\"=\"" + dayID + "\" AND \"" + COLUMN_TASKS_NAME + "\"=\"" + taskName + "\"";
         String validation = null;
-        try(Statement statement = conn.createStatement()) {
+        try (Statement statement = conn.createStatement()) {
             statement.execute(QUERY_TASK);
             ResultSet results = statement.getResultSet();
             validation = results.getString(COLUMN_TASKS_NAME);
 
 
-        }catch (SQLException e) {
-            return validation==null;
+        } catch (SQLException e) {
+            return validation == null;
         }
-        return validation==null;
+        return validation == null;
     }
-    public boolean subtaskNotInDB(WorkTask parent, String taskName){
-        String QUERY_SUBTASK = "SELECT * FROM " + TABLE_SUBTASKS + " WHERE \"" + COLUMN_SUBTASKS_PARENT +"\"=\"" + parent.getTaskName() + "\" AND \"" + COLUMN_SUBTASKS_NAME +"\"=\"" + taskName+"\"";
+
+    public boolean subtaskNotInDB(WorkTask parent, String taskName) {
+        String QUERY_SUBTASK = "SELECT * FROM " + TABLE_SUBTASKS + " WHERE \"" + COLUMN_SUBTASKS_PARENT + "\"=\"" + parent.getTaskName() + "\" AND \"" + COLUMN_SUBTASKS_NAME + "\"=\"" + taskName + "\"";
         String validation = null;
-        try(Statement statement = conn.createStatement()) {
+        try (Statement statement = conn.createStatement()) {
             statement.execute(QUERY_SUBTASK);
             ResultSet results = statement.getResultSet();
             validation = results.getString(COLUMN_TASKS_NAME);
 
 
-        }catch (SQLException e) {
-            return validation==null;
+        } catch (SQLException e) {
+            return validation == null;
         }
-        return validation==null;
+        return validation == null;
     }
+
     public void editTaskNameInDB(Task task, String name) {
         int dayID = task.getAssignedToDay().getDayID();
         String NAME_UPDATE = "UPDATE " + TABLE_TASKS + " SET " + COLUMN_TASKS_NAME + "=\"" + name + "\"  WHERE DayID=\"" + dayID + "\" AND \"" + COLUMN_TASKS_NAME + "\"=\"" + task.getTaskName() + "\"";
@@ -268,15 +278,16 @@ public class TaskDatasource {
 
         try (Statement statement = conn.createStatement()) {
             statement.execute(NAME_UPDATE);
-            if(task instanceof WorkTask){
+            if (task instanceof WorkTask) {
                 statement.execute(NAME_UPDATE_IN_SUBTASKS);
             }
             PlanTilesDatasource.getInstance().updateTaskNameForTiles(task.getAssignedToDay(), task.getTaskName(), name);
         } catch (SQLException e) {
-            log.error("Error took place while editing name of task: {}\n Message: {}",task.getTaskName(), e.getMessage());
+            log.error("Error took place while editing name of task: {}\n Message: {}", task.getTaskName(), e.getMessage());
         }
 
     }
+
     public void editTaskDetailsInDB(Task task, String details) {
         int dayID = task.getAssignedToDay().getDayID();
         String DETAILS_UPDATE = "UPDATE " + TABLE_TASKS + " SET " + COLUMN_TASKS_DETAILS + "=\"" + details +
@@ -285,7 +296,7 @@ public class TaskDatasource {
         try (Statement statement = conn.createStatement()) {
             statement.execute(DETAILS_UPDATE);
         } catch (SQLException e) {
-            log.error("Error took place while editing details of task: {}\n Message: {}",task.getTaskName(), e.getMessage());
+            log.error("Error took place while editing details of task: {}\n Message: {}", task.getTaskName(), e.getMessage());
         }
 
     }

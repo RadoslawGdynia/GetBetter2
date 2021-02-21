@@ -19,7 +19,7 @@ public abstract class Task {
 
     private int pointValue;
 
-    public Task(Day day, String name, String details){
+    public Task(Day day, String name, String details) {
         this.taskName.set(name);
         this.details.set(details);
         this.assignedToDay = day;
@@ -84,27 +84,28 @@ public abstract class Task {
         this.pointValue = value;
     }
 
-    public void moveTask(Day day){
+    public void moveTask(Day day) {
 
-        if(!(day.getDate().isBefore(LocalDate.now()))){
+        if (!(day.getDate().isBefore(LocalDate.now()))) {
             assignedToDay.removeTask(this);
             day.addTask(this);
             assignedToDay = day;
-        }
-        else {
+        } else {
             log.info("Models.CalendarModel.Tasks cannot be moved to the past");
         }
     }
 
     public boolean equals(Task obj) {
-        if(obj==this) return true;
+        if (obj == this) return true;
         return (this.getTaskName().equals(obj.getTaskName())) && (this.assignedToDay.getDate().equals(obj.assignedToDay.getDate()));
     }
-    public void editDetailsInApplicationAndDB(String newDetails){
+
+    public void editDetailsInApplicationAndDB(String newDetails) {
         setDetails(newDetails);
         TaskDatasource.getInstance().editTaskDetailsInDB(this, newDetails);
     }
-    public void editNameInApplicationAndDB(String newName){
+
+    public void editNameInApplicationAndDB(String newName) {
         setName(newName);
         TaskDatasource.getInstance().editTaskNameInDB(this, newName);
     }

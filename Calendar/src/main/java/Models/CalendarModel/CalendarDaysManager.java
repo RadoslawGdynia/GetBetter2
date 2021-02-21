@@ -2,7 +2,10 @@ package Models.CalendarModel;
 
 import Models.CalendarModel.Datasources.CalendarDatasource;
 import Models.CalendarModel.Days.Day;
+import Models.CalendarModel.Tasks.Task;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
@@ -12,16 +15,13 @@ import java.util.List;
 @Slf4j
 public class CalendarDaysManager {
 
-    private static CalendarDaysManager instance;
+    @Getter
+    private static final CalendarDaysManager instance = new CalendarDaysManager();
     private static final List<Day> calendar = FXCollections.observableArrayList();
     private final CalendarDatasource dayDatabaseManager = CalendarDatasource.getInstance();
 
-    public static CalendarDaysManager getInstance(){
-        if(instance==null){
-            instance = new CalendarDaysManager();
-        }
-        return instance;
-    }
+
+
     public int getDayIndex(LocalDate date) {
         try {
             for (Day day : calendar) {
@@ -42,10 +42,15 @@ public class CalendarDaysManager {
         return 0;
     }
 
-    public Day selectDayFromCalendar(LocalDate dateOfDay){
+    public Day selectDayFromCalendarByDate(LocalDate dateOfDay) {
         int indexOfDay = getDayIndex(dateOfDay);
         return calendar.get(indexOfDay);
     }
+
+    public Day selectDayFromCalendarByIndex(int index) {
+        return calendar.get(index);
+    }
+
 
     public void loadDaysFromDatabaseToCalendar() {
         try {
@@ -74,7 +79,7 @@ public class CalendarDaysManager {
                     CalendarDatasource.getInstance().insertDayToDB(day);
                     newDayToAdd = newDayToAdd.plusDays(1);
 
-                    if(newDayToAdd.isEqual(LocalDate.now().plusYears(1))) notFullYearAheadLoaded = false;
+                    if (newDayToAdd.isEqual(LocalDate.now().plusYears(1))) notFullYearAheadLoaded = false;
                 }
             }
         } catch (IOException e) {
@@ -82,23 +87,27 @@ public class CalendarDaysManager {
         }
     }
 
-    private void addDayToCalendar(Day addedDay) throws IOException {
-        if(!dayExistsInCalendar(addedDay)){
+    public void addDayToCalendar(Day addedDay) throws IOException {
+        if (!dayExistsInCalendar(addedDay)) {
             calendar.add(addedDay);
             log.info("Day {} was added to calendar", addedDay.getDate());
-        }
-        else {
-            log.info("Day {} is already in calendar",  addedDay.getDate());
+        } else {
+            log.info("Day {} is already in calendar", addedDay.getDate());
             throw new IOException("Tried to add existing day");
         }
     }
-    private boolean dayExistsInCalendar(Day day){
-        for(Day comparison : calendar){
-            if(comparison.getDate().isEqual(day.getDate())) return true;
+
+    private boolean dayExistsInCalendar(Day day) {
+        for (Day comparison : calendar) {
+            if (comparison.getDate().isEqual(day.getDate())) return true;
         }
         return false;
     }
 
     private CalendarDaysManager() {
+    }
+
+    public ObservableList<Task> provideTasksForDay(Day dayOfInterest) {
+        return dayOfInterest.getTodayTasks();
     }
 }

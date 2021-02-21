@@ -1,23 +1,25 @@
 package Models.CalendarModel.Days;
 
+import Models.CalendarModel.CalendarDaysManager;
 import Models.CalendarModel.Datasources.CalendarDatasource;
 import Models.CalendarModel.Datasources.TaskDatasource;
 import Models.CalendarModel.Tasks.Task;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.time.LocalDate;
 
+@Slf4j
+@Getter
 public class Day {
 
-    public static final Logger log = LoggerFactory.getLogger(Day.class);
+    private static int GlobalID = 1;
     private final LocalDate date;
     private final ObservableList<Task> todayTasks;
     private final int dayID;
-    private static int GlobalID = 1;
     private int taskNumber;
 
 
@@ -27,9 +29,9 @@ public class Day {
         GlobalID++;
         todayTasks = FXCollections.observableArrayList();
         try {
-            CalendarMain.getInstance().addDay(this);
+            CalendarDaysManager.getInstance().addDayToCalendar(this);
         } catch (IOException e) {
-            log.error("Operation of addition of day {} to calendar have failed",this.getDate());
+            log.error("Operation of addition of day {} to calendar have failed", this.getDate());
         }
     }
 
@@ -40,28 +42,11 @@ public class Day {
         GlobalID = id + 1;
         todayTasks = FXCollections.observableArrayList();
         try {
-            CalendarMain.getInstance().addDay(this);
+            CalendarDaysManager.getInstance().addDayToCalendar(this);
         } catch (IOException e) {
             log.error("Operation of addition of day {} to calendar have failed", this.getDate());
         }
 
-    }
-
-
-    public LocalDate getDate() {
-        return date;
-    }
-
-    public int getDayID() {
-        return dayID;
-    }
-
-    public int getTaskNumber() {
-        return taskNumber;
-    }
-
-    public ObservableList<Task> getTodayTasks() {
-        return todayTasks;
     }
 
     public void addTask(Task newTask) {
@@ -106,6 +91,7 @@ public class Day {
         }
         return false;
     }
+
     public boolean taskNameIsUsed(String sought) {
         for (Task task : todayTasks) {
             if (sought.equals(task.getTaskName())) {

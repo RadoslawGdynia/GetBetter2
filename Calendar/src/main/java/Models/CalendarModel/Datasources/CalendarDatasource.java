@@ -21,9 +21,6 @@ public class CalendarDatasource {
     public final String COLUMN_DAYS_TASKSNUMBER = "Tasks";
 
 
-
-
-
     private CalendarDatasource() {
     }
 
@@ -82,19 +79,18 @@ public class CalendarDatasource {
             log.error("Error took place while querying all days");
         }
     }
+
     public void updateDayTaskNumber(Day day, int taskNumber) {
-        String UPDATE_TASK_NUMBER = "UPDATE " + TABLE_DAYS + " SET \"" + COLUMN_DAYS_TASKSNUMBER + "\"=" + taskNumber +" WHERE \"" +
+        String UPDATE_TASK_NUMBER = "UPDATE " + TABLE_DAYS + " SET \"" + COLUMN_DAYS_TASKSNUMBER + "\"=" + taskNumber + " WHERE \"" +
                 COLUMN_DAYS_ID + "\"=" + day.getDayID();
-        try(Statement statement = conn.createStatement()){
+        try (Statement statement = conn.createStatement()) {
             statement.execute(UPDATE_TASK_NUMBER);
-            log.info("New value fo task number for day {} is: {}",day.getDate(), taskNumber);
+            log.info("New value fo task number for day {} is: {}", day.getDate(), taskNumber);
 
         } catch (SQLException e) {
             log.error("Problem occurred while updating in DB number of tasks for day: {}", day.getDate());
         }
     }
-
-
 
 
 }

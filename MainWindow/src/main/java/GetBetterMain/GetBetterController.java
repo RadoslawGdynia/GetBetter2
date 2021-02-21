@@ -6,17 +6,14 @@ import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-
+@Slf4j
 public class GetBetterController implements Initializable {
-
-    public static final Logger log = LoggerFactory.getLogger(GetBetterController.class);
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -36,7 +33,7 @@ public class GetBetterController implements Initializable {
         }
         catch (Exception e) {
             log.error("MESSAGE OF ERROR: {}", e.getMessage());
-            e.printStackTrace();
+            //e.printStackTrace();
         }
     }
     public void handleDiaryButtonClick() {

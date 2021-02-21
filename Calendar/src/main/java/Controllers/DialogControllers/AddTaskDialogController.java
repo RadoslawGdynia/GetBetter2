@@ -1,18 +1,13 @@
 package Controllers.DialogControllers;
 
-import Controllers.CalendarController;
-import Models.CalendarModel.AbstractFactories.TaskFactory;
-import Models.CalendarModel.Days.Day;
+import Models.CalendarModel.CalendarModel;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
 
 public class AddTaskDialogController {
-    public static final Logger log = LoggerFactory.getLogger(AddTaskDialogController.class);
 
-    Day day = CalendarController.getInstance().getSelectedDay();
     @FXML
     TextField taskName;
     @FXML
@@ -35,7 +30,7 @@ public class AddTaskDialogController {
     public void initialize() {
         deactivateWorkMode();
         warningLabel.setVisible(false);
-        deadlineDate.setValue(day.getDate());
+        deadlineDate.setValue(CalendarModel.getInstance().provideDateOfSelectedDay());
     }
 
     public void handleCancelButton() {
@@ -65,7 +60,9 @@ public class AddTaskDialogController {
         } else {
             RadioButton chosenOption = (RadioButton) taskType.getSelectedToggle();
             String nameOfButton = chosenOption.getText();
-            TaskFactory.createNewTask(day, nameOfButton, taskName.getText().trim(), details.getText().trim(), deadlineDate.getValue());
+
+            CalendarModel.getInstance().createTaskForSelectedDay(nameOfButton, taskName.getText().trim(), details.getText().trim(), deadlineDate.getValue());
+
             Stage stage = (Stage) cancelButton.getScene().getWindow();
             stage.close();
         }
